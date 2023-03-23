@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "parentId": null,
+    "userId": 1,
+    "text": "This is a great post!",
+    "createdAt": "2023-03-22T10:00:00.000Z",
+    "imageLink": null,
+    "textFileLink": null
+  },
+  {
+    "id": 2,
+    "parentId": null,
+    "userId": 2,
+    "text": "I agree, very informative.",
+    "createdAt": "2023-03-22T10:05:00.000Z",
+    "imageLink": null,
+    "textFileLink": null
+  },
+  {
+    "id": 3,
+    "parentId": 1,
+    "userId": 3,
+    "text": "Can you provide more details?",
+    "createdAt": "2023-03-22T10:10:00.000Z",
+    "imageLink": null,
+    "textFileLink": null
+  },
+  {
+    "id": 4,
+    "parentId": null,
+    "userId": 4,
+    "text": "This post helped me a lot, thank you!",
+    "createdAt": "2023-03-22T10:15:00.000Z",
+    "imageLink": null,
+    "textFileLink": null
+  },
+  {
+    "id": 5,
+    "parentId": 4,
+    "userId": 2,
+    "text": "Nice insights!",
+    "createdAt": "2023-03-22T10:20:00.000Z",
+    "imageLink": null,
+    "textFileLink": null
+  },
+  {
+    "id": 6,
+    "parentId": 5,
+    "userId": 3,
+    "text": "I have some doubts, can you clarify?",
+    "createdAt": "2023-03-22T10:25:00.000Z",
+    "imageLink": null,
+    "textFileLink": null
+  },
+  {
+    "id": 7,
+    "parentId": null,
+    "userId": 5,
+    "text": "Keep up the good work!",
+    "createdAt": "2023-03-22T10:30:00.000Z",
+    "imageLink": null,
+    "textFileLink": null
+  }
+]
