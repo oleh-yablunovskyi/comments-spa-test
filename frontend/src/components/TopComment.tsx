@@ -26,7 +26,6 @@ export const TopComment: FC<Props> = React.memo(({ comment }) => {
             <div className="Comment__header">
               <img
                 className="Comment__avatar"
-                // src="./icons/avatar-icon.png"
                 src={`https://avatars.dicebear.com/api/human/${comment.id}.svg`}
                 alt=""
               />
