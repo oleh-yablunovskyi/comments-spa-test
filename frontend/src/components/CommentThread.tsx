@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CommentType } from '../types/CommentType';
 import { commentsApi } from '../api/comments';
 
@@ -8,7 +8,11 @@ interface Props {
 }
 
 export const CommentThread: React.FC<Props> = ({ comment, level = 0 }) => {
-  const commentsChildren = commentsApi.loadCommentsByParentId(comment.id);
+  const [commentsChildren, setCommentsChildren] = useState<CommentType[]>([]);
+
+  useEffect(() => {
+    setCommentsChildren(commentsApi.loadCommentsByParentId(comment.id));
+  }, [comment.id]);
 
   return (
     <div className={`CommentThread CommentThread__level-${level}`}>
