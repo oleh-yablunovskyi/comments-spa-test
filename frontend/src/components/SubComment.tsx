@@ -10,21 +10,14 @@ interface Props {
 export const SubComment: FC<Props> = React.memo(({ comments, index }) => {
   const [comment, ...nextComments] = comments;
 
-  console.log({
-    index,
-    comment,
-    nextComments,
-  });
-
   return (
     <>
       <tr>
-        <td>
-          <div className="Comment" style={{ marginLeft: `${index * 50}px` }}>
+        <td style={{ paddingLeft: `${index * 50}px` }}>
+          <div className="Comment">
             <div className="Comment__header">
               <img
                 className="Comment__avatar"
-                // src="./icons/avatar-icon.png"
                 src={`https://avatars.dicebear.com/api/human/${comment.id}.svg`}
                 alt=""
               />
