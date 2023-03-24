@@ -1,19 +1,21 @@
-.container {
-  max-width: 1000px;
-  padding: 0 20px;
-  margin: auto;
-}
-
-.CommentsApp {
+.App {
   &__title {
     font-size: 40px;
   }
 }
 
+.CommentThread {
+  padding-left: 50px;
+
+  &__level-0 {
+    padding-left: 0;
+  }
+}
+
 .Comment {
-  padding: 20px 10px 20px 50px;
+  padding: 20px 10px 20px 0;
   margin: 5px 0;
-  max-width: 100%;
+  // max-width: 100%;
 
   color: #4a4a4a;
 
@@ -41,7 +43,7 @@
     height: 50px;
   }
 
-  &__author_name {
+  &__authorName {
     margin-right: 15px;
 
     font-size: 20px;
