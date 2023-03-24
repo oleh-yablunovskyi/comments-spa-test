@@ -7,7 +7,7 @@ interface Props {
   level?: number;
 }
 
-export const CommentThread: React.FC<Props> = ({ comment, level = 0 }) => {
+export const CommentThread: React.FC<Props> = ({ comment, level = 1 }) => {
   const [commentsChildren, setCommentsChildren] = useState<CommentType[]>([]);
 
   useEffect(() => {
