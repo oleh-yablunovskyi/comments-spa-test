@@ -4,10 +4,10 @@ import { commentsApi } from '../api/comments';
 
 interface Props {
   comment: CommentType;
-  level?: number;
+  level: number;
 }
 
-export const CommentThread: React.FC<Props> = ({ comment, level = 1 }) => {
+export const Comment: React.FC<Props> = ({ comment, level }) => {
   const [commentsChildren, setCommentsChildren] = useState<CommentType[]>([]);
 
   useEffect(() => {
@@ -15,8 +15,8 @@ export const CommentThread: React.FC<Props> = ({ comment, level = 1 }) => {
   }, [comment.id]);
 
   return (
-    <div className={`CommentThread CommentThread__level-${level}`}>
-      <div className="Comment">
+    <>
+      <div className={`Comment Comment--level-${level}`}>
         <div className="Comment__header">
           <img
             className="Comment__avatar"
@@ -38,17 +38,19 @@ export const CommentThread: React.FC<Props> = ({ comment, level = 1 }) => {
         </p>
       </div>
 
-      {commentsChildren.length > 0 && (
-        <div className="CommentsChildren">
-          {commentsChildren.map((childComment) => (
-            <CommentThread
-              comment={childComment}
-              level={level + 1}
-              key={childComment.id}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+      <>
+        {commentsChildren.length > 0 && (
+          <>
+            {commentsChildren.map((childComment) => (
+              <Comment
+                comment={childComment}
+                level={level < 10 ? level + 1 : level}
+                key={childComment.id}
+              />
+            ))}
+          </>
+        )}
+      </>
+    </>
   );
 };

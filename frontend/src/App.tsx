@@ -5,10 +5,10 @@ import { commentsApi } from './api/comments';
 import { CommentType } from './types/CommentType';
 
 export const App: React.FC = () => {
-  const [comments, setComments] = useState<CommentType[]>([]);
+  const [topComments, setTopComments] = useState<CommentType[]>([]);
 
   useEffect(() => {
-    setComments(commentsApi.loadTopComments());
+    setTopComments(commentsApi.loadTopComments());
   }, []);
 
   return (
@@ -16,7 +16,7 @@ export const App: React.FC = () => {
       <div className="App">
         <h1 className="App__title">Comments</h1>
 
-        <CommentsList comments={comments} />
+        <CommentsList topComments={topComments} />
       </div>
     </div>
   );
