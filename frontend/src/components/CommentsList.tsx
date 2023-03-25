@@ -6,10 +6,10 @@ interface Props {
   topComments: CommentType[];
 }
 
-export const CommentsList: React.FC<Props> = React.memo(({ topComments: comments }) => {
+export const CommentsList: React.FC<Props> = React.memo(({ topComments }) => {
   return (
     <div className="CommentsList">
-      {comments.map((topComment) => (
+      {topComments.map((topComment) => (
         <Comment
           comment={topComment}
           level={1}

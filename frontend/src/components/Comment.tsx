@@ -7,7 +7,7 @@ interface Props {
   level: number;
 }
 
-export const Comment: React.FC<Props> = ({ comment, level }) => {
+export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
   const [commentsChildren, setCommentsChildren] = useState<CommentType[]>([]);
 
   useEffect(() => {
@@ -53,4 +53,4 @@ export const Comment: React.FC<Props> = ({ comment, level }) => {
       </>
     </>
   );
-};
+});
