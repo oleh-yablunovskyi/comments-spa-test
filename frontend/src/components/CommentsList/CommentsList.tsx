@@ -1,6 +1,6 @@
 import React from 'react';
-import { CommentType } from '../types/CommentType';
-import { Comment } from './Comment';
+import { CommentType } from '../../types/CommentType';
+import { Comment } from '../Comment/Comment';
 
 interface Props {
   topComments: CommentType[];
