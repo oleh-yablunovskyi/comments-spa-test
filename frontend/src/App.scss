@@ -1,64 +1,42 @@
 .App {
+  color: #4a4a4a;
+
   &__title {
     font-size: 40px;
   }
-}
 
-.CommentThread {
-  padding-left: 50px;
-
-  &__level-1 {
-    padding-left: 60px;
+  &__bottom .Form {
+    border: 2px solid #cdd3da;
+    // background-color: #f5f5f5;
   }
 }
 
-.Comment {
-  padding: 20px 0px;
-  margin: 5px 0;
+.Button {
+  border-bottom: 1px solid #a7b7dd;
+  color: #244696;
+  padding-bottom: 2px;
+  // font-size: 16px;
+  margin: 0;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
 
-  color: #4a4a4a;
-
-  &__header {
-    position: relative;
-    margin-bottom: 7px;
+  &:hover {
+    color: #db0107;
+    border-bottom-color: #db0107;
   }
 
-  &__avatar {
-    position: absolute;
-    left:  -70px;
-    width: 50px;
-    height: 50px;
-  }
-
-  &__authorName {
-    margin-right: 15px;
-
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-  }
-
-  &__date {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 767px) {
-  .Comment__avatar {
-    left: -50px;
-    width: 40px;
-    height: 40px;
-  }
-
-  .CommentThread {
-    padding-left: 0px;
-
-    &__level-1 {
-      padding-left: 40px;
-    }
-
-    &__level-2 {
-      padding-left: 50px;
-    }
-  }
+  // background: #008CBA;
+  // border: 1px solid #008CBA;
+  // border-radius: 4px;
+  // color: #fff;
+  // font-size: 1rem;
+  // padding: 0.5rem 1rem;
+  // cursor: pointer;
+  // text-decoration: none;
+  // transition: all 0.3s ease;
+  
+  // &:hover {
+  //   background: #0073a6;
+  //   border-color: #0073a6;
+  // }
 }

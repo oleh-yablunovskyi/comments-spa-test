@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
-import { CommentsList } from './components/CommentsList';
+import { CommentsList } from './components/CommentsList/CommentsList';
 import { commentsApi } from './api/comments';
 import { CommentType } from './types/CommentType';
+import { CommentForm } from './components/CommentForm/CommentForm';
 
 export const App: React.FC = () => {
-  const [comments, setComments] = useState<CommentType[]>([]);
+  const [topComments, setTopComments] = useState<CommentType[]>([]);
 
   useEffect(() => {
-    setComments(commentsApi.loadTopComments());
+    setTopComments(commentsApi.loadTopComments());
   }, []);
 
   return (
@@ -16,7 +17,13 @@ export const App: React.FC = () => {
       <div className="App">
         <h1 className="App__title">Comments</h1>
 
-        <CommentsList comments={comments} />
+        <div className="App__main">
+          <CommentsList topComments={topComments} />
+        </div>
+
+        <div className="App__bottom">
+          <CommentForm />
+        </div>
       </div>
     </div>
   );

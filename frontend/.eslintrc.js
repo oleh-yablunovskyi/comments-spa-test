@@ -20,6 +20,13 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/ban-types': 0,
     '@typescript-eslint/semi': ['error'],
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        controlComponents: ['textarea'],
+        depth: 3,
+      },
+    ],
   },
   parser: '@typescript-eslint/parser',
   plugins: [
