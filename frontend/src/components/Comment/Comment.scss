@@ -1,6 +1,4 @@
 .Comment {
-  // color: #4a4a4a;
-
   &__wrapper {
     display: flex;
     gap: 20px;
@@ -10,7 +8,6 @@
     border: 1px solid #e1e7ed;
     border-radius: 8px;
     box-shadow: 0 0.5em 1em -0.125em rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.02);
-    // background-color: #f5f5f5;
   }
 
   &__avatar {
@@ -43,6 +40,20 @@
 
   &__text {
     margin-bottom: 7px;
+  }
+
+  &__answerButton {
+    margin-bottom: 16px;
+    padding-bottom: 2px;
+
+    border-bottom: 1px solid #a7b7dd;
+    color: #244696;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #db0107;
+      border-bottom-color: #db0107;
+    }
   }
 
   &--level-1 {

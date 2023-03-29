@@ -7,7 +7,7 @@ interface FormData {
   email: string;
   homePage: string;
   message: string;
-  image: File | null;
+  imageFile: File | null;
   textFile: File | null;
 }
 
@@ -16,7 +16,7 @@ const initialFormData: FormData = {
   email: '',
   homePage: '',
   message: '',
-  image: null,
+  imageFile: null,
   textFile: null,
 };
 
@@ -24,10 +24,26 @@ export const CommentForm = () => {
   const [count, setCount] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = event.target;
 
     setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    const imageFile = files ? files[0] : null;
+
+    setFormData((prevData) => ({ ...prevData, imageFile }));
+  };
+
+  const handleTextFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    const textFile = files ? files[0] : null;
+
+    setFormData((prevData) => ({ ...prevData, textFile }));
   };
 
   const resetFormData = () => {
@@ -38,6 +54,18 @@ export const CommentForm = () => {
     event.preventDefault();
 
     console.log(formData);
+
+    const payload = new FormData();
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== null) {
+        payload.append(key, value);
+      }
+    });
+
+    payload.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
 
     setCount((prevCount => prevCount + 1));
     resetFormData();
@@ -56,7 +84,7 @@ export const CommentForm = () => {
             required
             pattern="[A-Za-z0-9 ]+"
             className="Form__input"
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </label>
       </div>
@@ -70,7 +98,7 @@ export const CommentForm = () => {
             id="email"
             required
             className="Form__input"
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </label>
 
@@ -84,7 +112,7 @@ export const CommentForm = () => {
             type="url"
             id="homePage"
             className="Form__input"
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </label>
       </div>
@@ -106,39 +134,45 @@ export const CommentForm = () => {
             id="message"
             required
             className="Form__textarea"
-            onChange={handleChange}
+            onChange={handleInputChange}
           >
           </textarea>
         </div>
       </div>
 
       <div className="Form__group">
-        <label htmlFor="image" className="Form__label">
-
-          <p className="Form__caption">Upload Image (JPG, GIF, PNG, max 320x240px):</p>
+        <label htmlFor="imageFile" className="Form__label">
+          <p className="Form__caption">
+            Upload Image (JPG, GIF, PNG, max 320x240px):
+          </p>
 
           <input
             type="file"
-            id="image"
+            id="imageFile"
             accept="image/jpeg,image/gif,image/png"
             className="Form__input Form__inputFile"
+            onChange={handleImageUpload}
           />
         </label>
       </div>
 
       <div className="Form__group">
-        <label htmlFor="textfile" className="Form__label">
-          <p className="Form__caption">Upload Text File (TXT, max 100KB):</p>
+        <label htmlFor="textFile" className="Form__label">
+          <p className="Form__caption">
+            Upload Text File (TXT, max 100KB):
+          </p>
 
           <input
             type="file"
             id="textFile"
             accept=".txt"
             className="Form__input Form__inputFile"
+            onChange={handleTextFileUpload}
           />
         </label>
       </div>
-      <button type="submit" className="Form__submit">Submit</button>
+
+      <button type="submit" className="Form__submitButton">Submit</button>
     </form>
   );
 };
