@@ -1,23 +1,26 @@
+/* eslint-disable no-console */
+import axios from 'axios';
 import { CommentType } from '../types/CommentType';
-import { commentsFromServer } from '../mockup_data/comments';
 
-const loadTopComments = (): CommentType[] => {
-  return commentsFromServer.filter(c => c.parentId === null);
+const BASE_URL = 'http://localhost:5000';
+
+const getTopComments = async (): Promise<CommentType[]> => {
+  const response = await axios.get(`${BASE_URL}/comments`);
+
+  return response.data;
 };
 
-const loadCommentsByParentId = (parentId: number | null): CommentType[] => {
+const getCommentsByParentId = async (parentId: number | null): Promise<CommentType[]> => {
   if (!parentId) {
     return [];
   }
 
-  return commentsFromServer
-    .filter(comment => comment.parentId === parentId)
-    .sort((a, b) => (
-      new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf()
-    ));
+  const response = await axios.get(`${BASE_URL}/comments/${parentId}/children`);
+
+  return response.data;
 };
 
 export const commentsApi = {
-  loadTopComments,
-  loadCommentsByParentId,
+  getTopComments,
+  getCommentsByParentId,
 };

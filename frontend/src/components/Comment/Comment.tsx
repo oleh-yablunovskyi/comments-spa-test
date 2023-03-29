@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './Comment.scss';
 import { CommentType } from '../../types/CommentType';
@@ -13,8 +14,18 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
   const [commentsChildren, setCommentsChildren] = useState<CommentType[]>([]);
   const [showForm, setShowForm] = useState(false);
 
+  const loadChildrenComments = async () => {
+    try {
+      const loadedComments = await commentsApi.getCommentsByParentId(comment.id);
+
+      setCommentsChildren(loadedComments);
+    } catch (error) {
+      console.error(`Error fetching comments for parentId ${comment.id}:`, error);
+    }
+  };
+
   useEffect(() => {
-    setCommentsChildren(commentsApi.loadCommentsByParentId(comment.id));
+    loadChildrenComments();
   }, [comment.id]);
 
   return (
