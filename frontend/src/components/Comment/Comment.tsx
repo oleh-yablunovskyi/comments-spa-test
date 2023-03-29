@@ -46,7 +46,7 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
 
         <button
           type="button"
-          className="Button"
+          className="Comment__answerButton"
           onClick={() => setShowForm((prevState) => !prevState)}
         >
           {showForm ? '— Answer' : 'Answer'}
