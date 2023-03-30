@@ -5,22 +5,20 @@ import { CommentType } from '../types/CommentType';
 const BASE_URL = 'http://localhost:5000';
 
 const getTopComments = async (): Promise<CommentType[]> => {
-  const response = await axios.get(`${BASE_URL}/comments`);
+  const response = await axios
+    .get(`${BASE_URL}/comments`);
 
   return response.data;
 };
 
-const getCommentsByParentId = async (parentId: number | null): Promise<CommentType[]> => {
-  if (!parentId) {
-    return [];
-  }
-
-  const response = await axios.get(`${BASE_URL}/comments/${parentId}/children`);
+const getChildrenCommentsByID = async (id: number): Promise<CommentType[]> => {
+  const response = await axios
+    .get(`${BASE_URL}/comments/${id}/children`);
 
   return response.data;
 };
 
 export const commentsApi = {
   getTopComments,
-  getCommentsByParentId,
+  getChildrenCommentsByID,
 };
