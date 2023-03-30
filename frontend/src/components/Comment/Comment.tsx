@@ -11,22 +11,24 @@ interface Props {
 }
 
 export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
-  const [commentsChildren, setCommentsChildren] = useState<CommentType[]>([]);
+  const [childrenComments, setChildrenComments] = useState<CommentType[]>([]);
   const [showForm, setShowForm] = useState(false);
+
+  const { id } = comment;
 
   const loadChildrenComments = async () => {
     try {
-      const loadedComments = await commentsApi.getCommentsByParentId(comment.id);
+      const loadedComments = await commentsApi.getChildrenCommentsByID(id);
 
-      setCommentsChildren(loadedComments);
+      setChildrenComments(loadedComments);
     } catch (error) {
-      console.error(`Error fetching comments for parentId ${comment.id}:`, error);
+      console.error(`Error loading comments for comment with id ${id}:`, error);
     }
   };
 
   useEffect(() => {
     loadChildrenComments();
-  }, [comment.id]);
+  }, [id]);
 
   return (
     <>
@@ -34,14 +36,14 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
         <div className="Comment__wrapper">
           <img
             className="Comment__avatar"
-            src={`https://avatars.dicebear.com/api/human/${comment.id}.svg`}
+            src={`https://avatars.dicebear.com/api/human/${id}.svg`}
             alt=""
           />
 
           <div className="Comment__body">
             <div className="Comment__header">
               <span className="Comment__authorName">
-                Anonym
+                {comment.userName}
               </span>
 
               <span className="Comment__date">
@@ -67,9 +69,9 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
       </div>
 
       <>
-        {commentsChildren.length > 0 && (
+        {childrenComments.length > 0 && (
           <>
-            {commentsChildren.map((childComment) => (
+            {childrenComments.map((childComment) => (
               <Comment
                 comment={childComment}
                 level={level < 10 ? level + 1 : level}
