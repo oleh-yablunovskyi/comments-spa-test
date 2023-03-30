@@ -3,7 +3,7 @@
 
 const express = require('express');
 const cors = require('cors');
-const comments = require('./mockup_data/comments.js');
+const comments = require('./mockup_data/comments.json');
 const users = require('./mockup_data/users');
 
 const app = express();
@@ -26,7 +26,7 @@ function attachAuthorToComment(comment) {
   };
 }
 
-// Get comments endpoint
+// Get topComments endpoint
 app.get('/comments', (req, res) => {
   const sortBy = req.query.sortBy || 'createdAt';
   const sortOrder = req.query.sortOrder || 'asc';
@@ -58,9 +58,10 @@ app.get('/comments', (req, res) => {
   res.send(commentsWithAuthors);
 });
 
-// Get comments by parentId
-app.get('/comments/:parentId/children', (req, res) => {
-  const parentId = Number(req.params.parentId);
+// Get childrenComments endpoint
+app.get('/comments/:id/children', (req, res) => {
+  const parentId = Number(req.params.id);
+
   const childComments = comments.filter(
     comment => comment.parentId === parentId
   );
