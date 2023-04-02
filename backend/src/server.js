@@ -4,6 +4,7 @@
 const express = require('express');
 const cors = require('cors');
 const { User, Comment } = require('./models/associations');
+const createTables = require('./tablesCreator/createTables');
 
 // Multer
 const multer = require('multer');
@@ -152,6 +153,14 @@ app.post('/comments', upload.none(), async(req, res) => {
 // Start the server
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+(async() => {
+  await createTables();
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+})();
