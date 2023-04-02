@@ -3,7 +3,7 @@ import axios from 'axios';
 import { CommentType } from '../types/CommentType';
 // import { FormDataType } from '../types/FormDataType';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://comments-spa-test.onrender.com';
 
 const getTopComments = async (): Promise<CommentType[]> => {
   const response = await axios
