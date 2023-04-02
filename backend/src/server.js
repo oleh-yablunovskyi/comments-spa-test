@@ -157,10 +157,22 @@ const PORT = process.env.PORT || 5000;
 //   console.log(`Server is running on http://localhost:${PORT}`);
 // });
 
-(async() => {
-  await createTables();
+// (async() => {
+//   await createTables();
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
+//   app.listen(PORT, () => {
+//     console.log(`Server is running on http://localhost:${PORT}`);
+//   });
+// })();
+
+(async() => {
+  try {
+    await createTables();
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Error while creating tables:', error);
+  }
 })();
