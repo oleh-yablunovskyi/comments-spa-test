@@ -18,9 +18,11 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
 
   const loadChildrenComments = async () => {
     try {
-      const loadedComments = await commentsApi.getChildrenCommentsByID(id);
+      const comments = await commentsApi.getChildrenCommentsByID(id);
 
-      setChildrenComments(loadedComments);
+      setChildrenComments(comments);
+
+      // setShowForm(false);
     } catch (error) {
       console.error(`Error loading comments for comment with id ${id}:`, error);
     }
@@ -43,11 +45,11 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
           <div className="Comment__body">
             <div className="Comment__header">
               <span className="Comment__authorName">
-                {comment.userName}
+                {comment.author.user_name}
               </span>
 
               <span className="Comment__date">
-                {new Date(comment.createdAt).toLocaleString()}
+                {new Date(comment.created_at).toLocaleString()}
               </span>
             </div>
 
@@ -65,7 +67,12 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
           {showForm ? '— Answer' : 'Answer'}
         </button>
 
-        {showForm && <CommentForm />}
+        {showForm && (
+          <CommentForm
+            onSubmitLoadComments={loadChildrenComments}
+            parentId={id.toString()}
+          />
+        )}
       </div>
 
       <>

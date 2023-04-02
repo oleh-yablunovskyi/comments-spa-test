@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 import { CommentType } from '../types/CommentType';
+// import { FormDataType } from '../types/FormDataType';
 
 const BASE_URL = 'http://localhost:5000';
 
@@ -18,7 +19,22 @@ const getChildrenCommentsByID = async (id: number): Promise<CommentType[]> => {
   return response.data;
 };
 
+const createComment = async (payload: FormData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/comments`, payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log('Comment submitted successfully', response.data);
+  } catch (error) {
+    console.error('Error submitting comment', error);
+  }
+};
+
 export const commentsApi = {
   getTopComments,
   getChildrenCommentsByID,
+  createComment,
 };

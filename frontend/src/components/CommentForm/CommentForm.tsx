@@ -1,28 +1,27 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './CommentForm.scss';
+import { FormDataType } from '../../types/FormDataType';
+import { commentsApi } from '../../api/comments';
 
-interface FormData {
-  userName: string;
-  email: string;
-  homePage: string;
-  message: string;
-  imageFile: File | null;
-  textFile: File | null;
+interface Props {
+  onSubmitLoadComments: () => Promise<void>;
+  parentId?: string | null;
 }
 
-const initialFormData: FormData = {
+const initialFormData: FormDataType = {
   userName: '',
   email: '',
   homePage: '',
   message: '',
+  parentId: null,
   imageFile: null,
   textFile: null,
 };
 
-export const CommentForm = () => {
+export const CommentForm: React.FC<Props> = ({ onSubmitLoadComments, parentId = null }) => {
   const [count, setCount] = useState(0);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<FormDataType>(initialFormData);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = event.target;
@@ -35,7 +34,9 @@ export const CommentForm = () => {
 
     const imageFile = files ? files[0] : null;
 
-    setFormData((prevData) => ({ ...prevData, imageFile }));
+    if (imageFile) {
+      setFormData((prevData) => ({ ...prevData, imageFile }));
+    }
   };
 
   const handleTextFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,29 +44,33 @@ export const CommentForm = () => {
 
     const textFile = files ? files[0] : null;
 
-    setFormData((prevData) => ({ ...prevData, textFile }));
+    if (textFile) {
+      setFormData((prevData) => ({ ...prevData, textFile }));
+    }
   };
 
   const resetFormData = () => {
     setFormData(initialFormData);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log(formData);
+    const updatedFormData = { ...formData, parentId };
+
+    console.log('updatedFormData when submitting:', updatedFormData);
 
     const payload = new FormData();
 
-    Object.entries(formData).forEach(([key, value]) => {
+    Object.entries(updatedFormData).forEach(([key, value]) => {
       if (value !== null) {
         payload.append(key, value);
       }
     });
 
-    payload.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
+    await commentsApi.createComment(payload);
+
+    await onSubmitLoadComments();
 
     setCount((prevCount => prevCount + 1));
     resetFormData();
