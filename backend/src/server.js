@@ -3,76 +3,150 @@
 
 const express = require('express');
 const cors = require('cors');
-const comments = require('./mockup_data/comments.json');
-const users = require('./mockup_data/users');
+const { User, Comment } = require('./models/associations');
+
+// Multer
+const multer = require('multer');
+const upload = multer();
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'uploads/');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${Date.now()}-${file.originalname}`);
+//   },
+// });
+
+// const upload = multer({ storage });
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-function findUserById(userId) {
-  return users.find(user => user.id === userId);
-}
-
-function attachAuthorToComment(comment) {
-  const author = findUserById(comment.userId);
-
-  return {
-    ...comment,
-    userName: author.userName,
-    email: author.email,
-    homePage: author.homePage,
-  };
-}
+app.use('/uploads', express.static('uploads'));
 
 // Get topComments endpoint
-app.get('/comments', (req, res) => {
-  const sortBy = req.query.sortBy || 'createdAt';
+app.get('/comments', async(req, res) => {
+  const sortBy = req.query.sortBy || 'created_at';
   const sortOrder = req.query.sortOrder || 'asc';
-
   const page = Number(req.query.page) || 1;
   const perPage = Number(req.query.pageSize) || 25;
 
-  // Filter top-level comments
-  const topLevelComments = comments.filter(
-    comment => comment.parentId === null
-  );
+  try {
+    // Fetch top-level comments with their authors
+    const topLevelComments = await Comment.findAll({
+      where: {
+        parent_comment_id: null,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'user_name', 'email', 'home_page'],
+          as: 'author',
+        },
+      ],
+      order: [[sortBy, sortOrder]],
+      limit: perPage,
+      offset: (page - 1) * perPage,
+    });
 
-  // Sort comments
-  const sortedComments = topLevelComments.sort((a, b) => {
-    if (sortOrder === 'asc') {
-      return a[sortBy] > b[sortBy] ? 1 : -1;
-    } else {
-      return a[sortBy] < b[sortBy] ? 1 : -1;
-    }
-  });
-
-  // Paginate comments
-  const startIndex = (page - 1) * perPage;
-  const endIndex = startIndex + perPage;
-  const paginatedComments = sortedComments.slice(startIndex, endIndex);
-
-  const commentsWithAuthors = paginatedComments.map(attachAuthorToComment);
-
-  res.send(commentsWithAuthors);
+    res.send(topLevelComments);
+  } catch (error) {
+    console.error('Error fetching top-level comments:', error);
+    res.status(500).send(`Internal server error: ${error.message}`);
+  }
 });
 
 // Get childrenComments endpoint
-app.get('/comments/:id/children', (req, res) => {
-  const parentId = Number(req.params.id);
+app.get('/comments/:id/children', async(req, res) => {
+  try {
+    const parentId = Number(req.params.id);
 
-  const childComments = comments.filter(
-    comment => comment.parentId === parentId
-  );
+    const childComments = await Comment.findAll({
+      where: {
+        parent_comment_id: parentId,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'user_name', 'email', 'home_page'],
+          as: 'author',
+        },
+      ],
+      order: [
+        ['created_at', 'ASC'],
+      ],
+    });
 
-  if (childComments.length === 0) {
-    return res.send([]);
+    if (!childComments || childComments.length === 0) {
+      return res.send([]);
+    }
+
+    res.send(childComments);
+  } catch (err) {
+    console.error('Error fetching child comments:', err);
+    res.status(500).send('Internal server error');
   }
+});
 
-  const childCommentsWithAuthors = childComments.map(attachAuthorToComment);
+// Create newComment endpoint
+app.post('/comments', upload.none(), async(req, res) => {
+  try {
+    const {
+      userName,
+      email,
+      homePage,
+      parentId,
+      message,
+    } = req.body;
 
-  res.send(childCommentsWithAuthors);
+    // Check if the user exists
+    let user = await User.findOne({
+      where: { email },
+    });
+
+    // Create new user if user doesn't exist
+    if (!user) {
+      user = await User.create({
+        user_name: userName,
+        email,
+        home_page: homePage,
+      });
+    }
+
+    console.log('parentId:', parentId);
+
+    // Create a new comment with the provided data
+    const newComment = await Comment.create({
+      user_id: user.id,
+      text: message,
+      parent_comment_id: Number(parentId) || null,
+      image_link: null,
+      text_file_link: null,
+    });
+
+    // Fetch the newly created comment with the author
+    const createdComment = await Comment.findOne({
+      where: { id: newComment.id },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'user_name', 'email', 'home_page'],
+          as: 'author',
+        },
+      ],
+    });
+
+    if (!createdComment) {
+      return res.status(500).send('Error creating comment');
+    }
+
+    res.send(createdComment);
+  } catch (err) {
+    console.error('Error creating comment:', err);
+    res.status(500).send('Internal server error');
+  }
 });
 
 // Start the server

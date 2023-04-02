@@ -7,7 +7,8 @@ module.exports = {
     expect: 'readonly',
   },
   rules: {
-    'no-proto': 0
+    'no-proto': 0,
+    "object-curly-newline": "off"
   },
   plugins: ['jest']
 };
