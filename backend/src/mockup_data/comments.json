@@ -124,5 +124,50 @@
   "created_at": "2023-03-17T13:08:00.000Z",
   "image_link": null,
   "text_file_link": null
+  },
+  {
+  "id": 19,
+  "parent_comment_id": 15,
+  "user_id": 3,
+  "text": "I completely agree! Yoga has been a game changer for me too, especially in terms of mental clarity and balance. Does anyone have any recommendations for beginners?",
+  "created_at": "2023-03-21T15:20:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  },
+  {
+  "id": 20,
+  "parent_comment_id": 19,
+  "user_id": 1,
+  "text": "For beginners, I'd suggest starting with some basic poses like the child's pose, downward-facing dog, and mountain pose. Don't push yourself too hard in the beginning and try to focus on your breath. Online resources and videos can be a great way to start!",
+  "created_at": "2023-03-21T16:05:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  },
+  {
+  "id": 21,
+  "parent_comment_id": 20,
+  "user_id": 5,
+  "text": "Thank you for the suggestions! I'll definitely look into online resources and videos. It's nice to know there are some simple poses to start with.",
+  "created_at": "2023-03-21T17:15:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  },
+  {
+  "id": 22,
+  "parent_comment_id": 21,
+  "user_id": 2,
+  "text": "Once you become comfortable with the basic poses, you can try joining a local yoga class or studio. It's a great way to meet new people and learn from experienced instructors!",
+  "created_at": "2023-03-21T18:30:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  },
+  {
+  "id": 23,
+  "parent_comment_id": 22,
+  "user_id": 4,
+  "text": "That's true! Joining a local class helped me a lot in improving my practice and understanding the correct alignment of poses. Plus, it's motivating to practice with others!",
+  "created_at": "2023-03-21T19:45:00.000Z",
+  "image_link": null,
+  "text_file_link": null
   }
 ]

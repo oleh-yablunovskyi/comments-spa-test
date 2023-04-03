@@ -61,9 +61,10 @@ app.get('/comments', async(req, res) => {
 
 // Get childrenComments endpoint
 app.get('/comments/:id/children', async(req, res) => {
-  try {
-    const parentId = Number(req.params.id);
+  const parentId = Number(req.params.id);
 
+  try {
+    // Fetch child-comments with their authors
     const childComments = await Comment.findAll({
       where: {
         parent_comment_id: parentId,
@@ -93,15 +94,15 @@ app.get('/comments/:id/children', async(req, res) => {
 
 // Create newComment endpoint
 app.post('/comments', upload.none(), async(req, res) => {
-  try {
-    const {
-      userName,
-      email,
-      homePage,
-      parentId,
-      message,
-    } = req.body;
+  const {
+    userName,
+    email,
+    homePage,
+    parentId,
+    message,
+  } = req.body;
 
+  try {
     // Check if the user exists
     let user = await User.findOne({
       where: { email },
@@ -150,18 +151,6 @@ app.post('/comments', upload.none(), async(req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
-
-// (async() => {
-//   await createTables();
-
-//   app.listen(PORT, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-//   });
-// })();
 
 (async() => {
   try {
