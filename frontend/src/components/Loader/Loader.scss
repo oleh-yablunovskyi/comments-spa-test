@@ -1,5 +1,6 @@
-.loader {
+.Loader {
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
 
@@ -8,21 +9,17 @@
     width: 2em;
     height: 2em;
     margin: 1em auto;
-    border: 0.3em solid #89939a;
-    border-left-color: #313237;
-    box-shadow: 0 0 1em #89939a;
-    animation: load 1.2s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+    border: 0.3em solid #ddd;
+    border-left-color: #000;
+    animation: load8 1.2s infinite linear;
   }
 }
 
-@keyframes load {
+@keyframes load8 {
   0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(0.6);
+    transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg) scale(1);
+    transform: rotate(360deg);
   }
 }
