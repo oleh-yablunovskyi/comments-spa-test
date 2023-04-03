@@ -90,93 +90,39 @@
   "text_file_link": null
   },
   {
-    "id": 11,
-    "parent_comment_id": 1,
-    "user_id": 2,
-    "text": "I agree, the park is a wonderful place to relax and enjoy nature. Spring is definitely my favorite season!",
-    "created_at": "2023-03-28T17:22:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 12,
-    "parent_comment_id": 2,
-    "user_id": 3,
-    "text": "I recently read 'The Nightingale' by Kristin Hannah. It's an amazing historical fiction novel, highly recommended!",
-    "created_at": "2023-03-27T19:34:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 13,
-    "parent_comment_id": 2,
-    "user_id": 5,
-    "text": "If you're into mystery, I suggest checking out 'The Silent Patient' by Alex Michaelides. I couldn't put it down!",
-    "created_at": "2023-03-28T10:18:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 14,
-    "parent_comment_id": 3,
-    "user_id": 1,
-    "text": "That sounds delicious! Do you mind sharing the recipe?",
-    "created_at": "2023-03-26T11:24:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 15,
-    "parent_comment_id": 5,
-    "user_id": 4,
-    "text": "I've been practicing yoga for a few years now. It has really helped me with flexibility and stress management. You should give it a try!",
-    "created_at": "2023-03-21T14:54:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 16,
-    "parent_comment_id": 7,
-    "user_id": 3,
-    "text": "Autumn is my favorite season! I love the cooler weather and the vibrant colors of the leaves.",
-    "created_at": "2023-03-19T21:18:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 17,
-    "parent_comment_id": 8,
-    "user_id": 2,
-    "text": "Watercolor painting sounds like a lot of fun. I've always wanted to try it myself. Any tips for beginners?",
-    "created_at": "2023-03-18T16:12:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 18,
-    "parent_comment_id": 9,
-    "user_id": 5,
-    "text": "I'm a photography enthusiast! I mostly enjoy taking pictures of landscapes and wildlife. What about you?",
-    "created_at": "2023-03-17T13:08:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 19,
-    "parent_comment_id": 4,
-    "user_id": 1,
-    "text": "Space exploration has always fascinated me as well. Do you have any favorite documentaries or movies about space?",
-    "created_at": "2023-03-22T14:29:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    },
-    {
-    "id": 20,
-    "parent_comment_id": 10,
-    "user_id": 4,
-    "text": "I love attending art exhibits, too! It's always interesting to see the creativity and innovation in our local art scene. Have you tried creating your own artwork?",
-    "created_at": "2023-03-16T18:36:00.000Z",
-    "image_link": null,
-    "text_file_link": null
-    }
+  "id": 12,
+  "parent_comment_id": 2,
+  "user_id": 3,
+  "text": "I recently read 'The Nightingale' by Kristin Hannah. It's an amazing historical fiction novel, highly recommended!",
+  "created_at": "2023-03-27T19:34:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  },
+  {
+  "id": 13,
+  "parent_comment_id": 2,
+  "user_id": 5,
+  "text": "If you're into mystery, I suggest checking out 'The Silent Patient' by Alex Michaelides. I couldn't put it down!",
+  "created_at": "2023-03-28T10:18:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  },
+  {
+  "id": 15,
+  "parent_comment_id": 5,
+  "user_id": 4,
+  "text": "I've been practicing yoga for a few years now. It has really helped me with flexibility and stress management. You should give it a try!",
+  "created_at": "2023-03-21T14:54:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  },
+  {
+  "id": 18,
+  "parent_comment_id": 9,
+  "user_id": 5,
+  "text": "I'm a photography enthusiast! I mostly enjoy taking pictures of landscapes and wildlife. What about you?",
+  "created_at": "2023-03-17T13:08:00.000Z",
+  "image_link": null,
+  "text_file_link": null
+  }
 ]

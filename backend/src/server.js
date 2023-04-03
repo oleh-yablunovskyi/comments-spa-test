@@ -116,8 +116,6 @@ app.post('/comments', upload.none(), async(req, res) => {
       });
     }
 
-    console.log('parentId:', parentId);
-
     // Create a new comment with the provided data
     const newComment = await Comment.create({
       user_id: user.id,
