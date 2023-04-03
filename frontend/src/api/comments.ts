@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 import { CommentType } from '../types/CommentType';
-// import { FormDataType } from '../types/FormDataType';
 
 const BASE_URL = 'https://comments-spa-test.onrender.com';
+// const BASE_URL = 'http://localhost:5000';
 
 const getTopComments = async (): Promise<CommentType[]> => {
   const response = await axios
@@ -29,7 +29,7 @@ const createComment = async (payload: FormData) => {
 
     console.log('Comment submitted successfully', response.data);
   } catch (error) {
-    console.error('Error submitting comment', error);
+    console.error('Error submitting comment:', error);
   }
 };
 
