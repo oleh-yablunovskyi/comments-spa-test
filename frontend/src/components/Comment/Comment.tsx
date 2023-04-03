@@ -21,8 +21,6 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
       const comments = await commentsApi.getChildrenCommentsByID(id);
 
       setChildrenComments(comments);
-
-      // setShowForm(false);
     } catch (error) {
       console.error(`Error loading comments for comment with id ${id}:`, error);
     }
@@ -70,6 +68,7 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
         {showForm && (
           <CommentForm
             onSubmitLoadComments={loadChildrenComments}
+            onSubmitHideForm={() => setShowForm(false)}
             parentId={id.toString()}
           />
         )}
