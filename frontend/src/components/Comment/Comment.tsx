@@ -4,6 +4,7 @@ import './Comment.scss';
 import { CommentType } from '../../types/CommentType';
 import { commentsApi } from '../../api/comments';
 import { CommentForm } from '../CommentForm/CommentForm';
+import { Loader } from '../Loader/Loader';
 
 interface Props {
   comment: CommentType;
@@ -12,17 +13,22 @@ interface Props {
 
 export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
   const [childrenComments, setChildrenComments] = useState<CommentType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
   const { id } = comment;
 
   const loadChildrenComments = async () => {
+    setIsLoading(true);
+
     try {
       const comments = await commentsApi.getChildrenCommentsByID(id);
 
       setChildrenComments(comments);
     } catch (error) {
       console.error(`Error loading comments for comment with id ${id}:`, error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,17 +81,25 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
       </div>
 
       <>
-        {childrenComments.length > 0 && (
-          <>
-            {childrenComments.map((childComment) => (
-              <Comment
-                comment={childComment}
-                level={level < 10 ? level + 1 : level}
-                key={childComment.id}
-              />
-            ))}
-          </>
-        )}
+        {isLoading
+          ? (
+            <Loader />
+          )
+          : (
+            <>
+              {childrenComments.length > 0 && (
+                <>
+                  {childrenComments.map((childComment) => (
+                    <Comment
+                      comment={childComment}
+                      level={level < 10 ? level + 1 : level}
+                      key={childComment.id}
+                    />
+                  ))}
+                </>
+              )}
+            </>
+          )}
       </>
     </>
   );
