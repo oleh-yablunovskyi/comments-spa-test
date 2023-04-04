@@ -4,7 +4,8 @@
 const express = require('express');
 const cors = require('cors');
 const { User, Comment } = require('./models/associations');
-const createTables = require('./tablesCreator/createTables');
+// const createTables = require('./tablesCreator/createTables');
+const setupDatabase = require('./main');
 
 // Multer
 const multer = require('multer');
@@ -154,7 +155,7 @@ const PORT = process.env.PORT || 5000;
 
 (async() => {
   try {
-    await createTables();
+    await setupDatabase();
 
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
