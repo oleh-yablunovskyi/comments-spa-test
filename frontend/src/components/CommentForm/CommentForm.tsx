@@ -1,6 +1,12 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './CommentForm.scss';
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import sanitizeHtml from 'sanitize-html';
+import he from 'he';
+
 import { Loader } from '../Loader/Loader';
 import { FormDataType } from '../../types/FormDataType';
 import { commentsApi } from '../../api/comments';
@@ -26,14 +32,29 @@ export const CommentForm: React.FC<Props> = ({
   onSubmitHideForm,
   parentId = null,
 }) => {
-  const [count, setCount] = useState(0);
   const [formData, setFormData] = useState<FormDataType>(initialFormData);
+  const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [count, setCount] = useState(0);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const modules = {
+    toolbar: [
+      ['bold', 'italic'],
+      ['link'],
+      ['code-block'],
+    ],
+  };
+
+  const formats = ['bold', 'italic', 'link', 'code-block'];
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
     setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
+
+  const handleMessageChange = (value: React.SetStateAction<string>) => {
+    setMessage(value);
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +83,37 @@ export const CommentForm: React.FC<Props> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     setIsLoading(true);
 
-    const updatedFormData = { ...formData, parentId };
+    // Decode the characters escaped by ReactQuill
+    const decodedMessage = he.decode(message);
+
+    const sanitizedMessage = sanitizeHtml(decodedMessage, {
+      allowedTags: ['a', 'pre', 'code', 'em', 'strong'],
+      allowedAttributes: {
+        a: ['href', 'title'],
+      },
+      // exclusiveFilter: (frame) => {
+      //   return !frame.text.trim();
+      // },
+
+      exclusiveFilter: (frame) => {
+        if (frame.tag === 'i' || frame.tag === 'strong') {
+          return false;
+        }
+
+        return !frame.text.trim();
+      },
+    });
+
+    // Process the sanitized HTML content
+    console.log('sanitizedMessage when submitting:', sanitizedMessage);
+
+    const updatedFormData = {
+      ...formData,
+      parentId,
+      message: sanitizedMessage,
+    };
 
     console.log('updatedFormData when submitting:', updatedFormData);
 
@@ -80,13 +128,13 @@ export const CommentForm: React.FC<Props> = ({
     await commentsApi.createComment(payload);
     await onSubmitLoadComments();
 
-    if (onSubmitHideForm) {
-      onSubmitHideForm();
-    }
-
     setCount((prevCount => prevCount + 1));
     resetFormData();
     setIsLoading(false);
+
+    if (onSubmitHideForm) {
+      onSubmitHideForm();
+    }
   };
 
   return (
@@ -147,20 +195,13 @@ export const CommentForm: React.FC<Props> = ({
               </label>
 
               <div className="Form__messageBlock">
-                <div className="Form__tagPanel">
-                  <button type="button" className="Form__tagButton" data-tag="i">i</button>
-                  <button type="button" className="Form__tagButton" data-tag="strong">strong</button>
-                  <button type="button" className="Form__tagButton" data-tag="code">code</button>
-                  <button type="button" className="Form__tagButton" data-tag="a">a</button>
-                </div>
-
-                <textarea
-                  id="message"
-                  required
-                  className="Form__textarea"
-                  onChange={handleInputChange}
-                >
-                </textarea>
+                <ReactQuill
+                  value={message}
+                  onChange={handleMessageChange}
+                  modules={modules}
+                  formats={formats}
+                  theme="snow"
+                />
               </div>
             </div>
 
