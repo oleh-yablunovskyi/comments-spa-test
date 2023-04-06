@@ -1,12 +1,10 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import './CommentForm.scss';
-
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import sanitizeHtml from 'sanitize-html';
-import he from 'he';
-
+import { sanitizeMessage } from '../../utils/sanitizeMessage';
+import { modules, formats } from './quillConfig';
 import { Loader } from '../Loader/Loader';
 import { FormDataType } from '../../types/FormDataType';
 import { commentsApi } from '../../api/comments';
@@ -32,20 +30,9 @@ export const CommentForm: React.FC<Props> = ({
   onSubmitHideForm,
   parentId = null,
 }) => {
-  const [formData, setFormData] = useState<FormDataType>(initialFormData);
-  const [message, setMessage] = useState('');
+  const [formData, setFormData] = useState<FormDataType>({ ...initialFormData, parentId });
   const [isLoading, setIsLoading] = useState(false);
   const [count, setCount] = useState(0);
-
-  const modules = {
-    toolbar: [
-      ['bold', 'italic'],
-      ['link'],
-      ['code-block'],
-    ],
-  };
-
-  const formats = ['bold', 'italic', 'link', 'code-block'];
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -53,8 +40,8 @@ export const CommentForm: React.FC<Props> = ({
     setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
-  const handleMessageChange = (value: React.SetStateAction<string>) => {
-    setMessage(value);
+  const handleMessageChange = (value: string) => {
+    setFormData((prevData) => ({ ...prevData, message: value }));
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,41 +72,18 @@ export const CommentForm: React.FC<Props> = ({
     event.preventDefault();
     setIsLoading(true);
 
-    // Decode the characters escaped by ReactQuill
-    const decodedMessage = he.decode(message);
+    const sanitizedMessage = sanitizeMessage(formData.message);
 
-    const sanitizedMessage = sanitizeHtml(decodedMessage, {
-      allowedTags: ['a', 'pre', 'code', 'em', 'strong'],
-      allowedAttributes: {
-        a: ['href', 'title'],
-      },
-      // exclusiveFilter: (frame) => {
-      //   return !frame.text.trim();
-      // },
-
-      exclusiveFilter: (frame) => {
-        if (frame.tag === 'i' || frame.tag === 'strong') {
-          return false;
-        }
-
-        return !frame.text.trim();
-      },
-    });
-
-    // Process the sanitized HTML content
-    console.log('sanitizedMessage when submitting:', sanitizedMessage);
-
-    const updatedFormData = {
+    const preparedFormData: FormDataType = {
       ...formData,
-      parentId,
       message: sanitizedMessage,
     };
 
-    console.log('updatedFormData when submitting:', updatedFormData);
+    console.log('preparedFormData when submitting:', preparedFormData);
 
     const payload = new FormData();
 
-    Object.entries(updatedFormData).forEach(([key, value]) => {
+    Object.entries(preparedFormData).forEach(([key, value]) => {
       if (value !== null) {
         payload.append(key, value);
       }
@@ -196,7 +160,7 @@ export const CommentForm: React.FC<Props> = ({
 
               <div className="Form__messageBlock">
                 <ReactQuill
-                  value={message}
+                  value={formData.message}
                   onChange={handleMessageChange}
                   modules={modules}
                   formats={formats}
