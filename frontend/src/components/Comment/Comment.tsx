@@ -51,9 +51,13 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
               </span>
             </div>
 
-            <p className="Comment__text">
+            {/* <p className="Comment__text">
               {comment.text}
-            </p>
+            </p> */}
+            <p
+              className="Comment__text"
+              dangerouslySetInnerHTML={{ __html: comment.text }}
+            />
           </div>
         </div>
 
