@@ -14,7 +14,7 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
   const [childrenComments, setChildrenComments] = useState<CommentType[]>([]);
   const [showForm, setShowForm] = useState(false);
 
-  const { id } = comment;
+  const { id, image_link, text_file_link } = comment;
 
   const loadChildrenComments = async () => {
     try {
@@ -29,6 +29,18 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
   useEffect(() => {
     loadChildrenComments();
   }, [id]);
+
+  const handleImageClick = (imageLink: string | null) => {
+    if (imageLink) {
+      window.open(`https://comments-spa-test.onrender.com/${imageLink}`, '_blank');
+    }
+  };
+
+  const handleTextFileClick = (textFileLink: string | null) => {
+    if (textFileLink) {
+      window.open(`https://comments-spa-test.onrender.com/${textFileLink}`, '_blank');
+    }
+  };
 
   return (
     <>
@@ -55,6 +67,29 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
               className="Comment__text"
               dangerouslySetInnerHTML={{ __html: comment.text }}
             />
+
+            {(image_link || text_file_link) && (
+              <div className="Comment__attachments">
+                <span>Files attached:</span>
+
+                {image_link && (
+                  <img
+                    className="Comment__attachedImage"
+                    src={`https://comments-spa-test.onrender.com/${image_link}`}
+                    alt="Attached"
+                    onClick={() => handleImageClick(image_link)}
+                  />
+                )}
+
+                {text_file_link && (
+                  <div
+                    className="Comment__fileIcon"
+                    onClick={() => handleTextFileClick(text_file_link)}
+                  >
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
