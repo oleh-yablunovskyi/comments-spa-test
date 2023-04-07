@@ -3,42 +3,15 @@
 
 const express = require('express');
 const cors = require('cors');
-const { User, Comment } = require('./models/associations');
-const setupDatabase = require('./main');
-
-const fs = require('fs');
 const path = require('path');
 
-const createFolderIfNotExists = (folderPath) => {
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true });
-  }
-};
+const { User, Comment } = require('./models/associations');
+const setupDatabase = require('./main');
+const createFolderIfNotExists = require('./utils/createFolderIfNotExists');
+const upload = require('./utils/multerConfig');
 
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'images'));
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'text'));
-
-// Multer
-const multer = require('multer');
-
-const storage = multer.diskStorage({
-  destination: (_req, file, cb) => {
-    const baseDir = path.join(__dirname, 'uploads');
-
-    if (file.fieldname === 'imageFile') {
-      cb(null, path.join(baseDir, 'images'));
-    } else if (file.fieldname === 'textFile') {
-      cb(null, path.join(baseDir, 'text'));
-    } else {
-      cb(new Error('Invalid field name'));
-    }
-  },
-  filename: (_req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
 
 const app = express();
 
