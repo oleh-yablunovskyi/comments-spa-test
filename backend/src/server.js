@@ -6,6 +6,8 @@ const cors = require('cors');
 const { User, Comment } = require('./models/associations');
 const setupDatabase = require('./main');
 
+const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
+
 // Multer
 const multer = require('multer');
 
@@ -126,11 +128,11 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
     const { imageFile, textFile } = req.files;
 
     const imageLink = imageFile
-      ? `uploads/images/${imageFile[0].filename}`
+      ? `${baseUrl}/uploads/images/${imageFile[0].filename}`
       : null;
 
     const textFileLink = textFile
-      ? `uploads/text/${textFile[0].filename}`
+      ? `${baseUrl}/uploads/text/${textFile[0].filename}`
       : null;
 
     // Create a new comment with the provided data
