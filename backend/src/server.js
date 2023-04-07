@@ -21,21 +21,6 @@ createFolderIfNotExists(path.join(__dirname, 'uploads', 'text'));
 // Multer
 const multer = require('multer');
 
-// const storage = multer.diskStorage({
-//   destination: (_req, file, cb) => {
-//     if (file.fieldname === 'imageFile') {
-//       cb(null, 'uploads/images/');
-//     } else if (file.fieldname === 'textFile') {
-//       cb(null, 'uploads/text/');
-//     } else {
-//       cb(new Error('Invalid field name'));
-//     }
-//   },
-//   filename: (_req, file, cb) => {
-//     cb(null, `${Date.now()}-${file.originalname}`);
-//   },
-// });
-
 const storage = multer.diskStorage({
   destination: (_req, file, cb) => {
     const baseDir = path.join(__dirname, 'uploads');
@@ -59,6 +44,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
 app.use('/uploads', express.static('uploads'));
 
 // Get topComments endpoint
