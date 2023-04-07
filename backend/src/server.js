@@ -6,17 +6,15 @@ const cors = require('cors');
 const { User, Comment } = require('./models/associations');
 const setupDatabase = require('./main');
 
-const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
-
 // Multer
 const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (_req, file, cb) => {
     if (file.fieldname === 'imageFile') {
-      cb(null, `${baseUrl}/uploads/images/`);
+      cb(null, 'uploads/images/');
     } else if (file.fieldname === 'textFile') {
-      cb(null, `${baseUrl}/uploads/text/`);
+      cb(null, 'uploads/text/');
     } else {
       cb(new Error('Invalid field name'));
     }
@@ -128,11 +126,11 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
     const { imageFile, textFile } = req.files;
 
     const imageLink = imageFile
-      ? `${baseUrl}/uploads/images/${imageFile[0].filename}`
+      ? `uploads/images/${imageFile[0].filename}`
       : null;
 
     const textFileLink = textFile
-      ? `${baseUrl}/uploads/text/${textFile[0].filename}`
+      ? `uploads/text/${textFile[0].filename}`
       : null;
 
     // Create a new comment with the provided data
