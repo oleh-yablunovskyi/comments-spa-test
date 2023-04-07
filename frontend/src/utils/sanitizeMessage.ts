@@ -1,5 +1,5 @@
-import sanitizeHtml from 'sanitize-html';
 import he from 'he';
+import sanitizeHtml from 'sanitize-html';
 
 export const sanitizeMessage = (message: string): string => {
   // Decode the characters escaped by ReactQuill
