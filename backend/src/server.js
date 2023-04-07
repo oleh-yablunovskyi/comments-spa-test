@@ -4,23 +4,27 @@
 const express = require('express');
 const cors = require('cors');
 const { User, Comment } = require('./models/associations');
-// const createTables = require('./tablesCreator/createTables');
 const setupDatabase = require('./main');
 
 // Multer
 const multer = require('multer');
-const upload = multer();
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'uploads/');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, `${Date.now()}-${file.originalname}`);
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: (_req, file, cb) => {
+    if (file.fieldname === 'imageFile') {
+      cb(null, 'uploads/images/');
+    } else if (file.fieldname === 'textFile') {
+      cb(null, 'uploads/text/');
+    } else {
+      cb(new Error('Invalid field name'));
+    }
+  },
+  filename: (_req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
 
-// const upload = multer({ storage });
+const upload = multer({ storage });
 
 const app = express();
 
@@ -36,7 +40,7 @@ app.get('/comments', async(req, res) => {
   const perPage = Number(req.query.pageSize) || 25;
 
   try {
-    // Fetch top-level comments with their authors
+    // Fetch top-level comments and add authors to them
     const topLevelComments = await Comment.findAll({
       where: {
         parent_comment_id: null,
@@ -65,7 +69,7 @@ app.get('/comments/:id/children', async(req, res) => {
   const parentId = Number(req.params.id);
 
   try {
-    // Fetch child-comments with their authors
+    // Fetch child-comments and add authors to them
     const childComments = await Comment.findAll({
       where: {
         parent_comment_id: parentId,
@@ -94,7 +98,7 @@ app.get('/comments/:id/children', async(req, res) => {
 });
 
 // Create newComment endpoint
-app.post('/comments', upload.none(), async(req, res) => {
+app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }]), async(req, res) => {
   const {
     userName,
     email,
@@ -118,13 +122,24 @@ app.post('/comments', upload.none(), async(req, res) => {
       });
     }
 
+    // Get the uploaded files links
+    const { imageFile, textFile } = req.files;
+
+    const imageLink = imageFile
+      ? `uploads/images/${imageFile[0].filename}`
+      : null;
+
+    const textFileLink = textFile
+      ? `uploads/text/${textFile[0].filename}`
+      : null;
+
     // Create a new comment with the provided data
     const newComment = await Comment.create({
       user_id: user.id,
       text: message,
       parent_comment_id: Number(parentId) || null,
-      image_link: null,
-      text_file_link: null,
+      image_link: imageLink,
+      text_file_link: textFileLink,
     });
 
     // Fetch the newly created comment with the author
