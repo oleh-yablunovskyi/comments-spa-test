@@ -14,9 +14,9 @@ const multer = require('multer');
 const storage = multer.diskStorage({
   destination: (_req, file, cb) => {
     if (file.fieldname === 'imageFile') {
-      cb(null, 'uploads/images/');
+      cb(null, `${baseUrl}/uploads/images/`);
     } else if (file.fieldname === 'textFile') {
-      cb(null, 'uploads/text/');
+      cb(null, `${baseUrl}/uploads/text/`);
     } else {
       cb(new Error('Invalid field name'));
     }
