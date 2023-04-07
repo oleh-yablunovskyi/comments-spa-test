@@ -5,6 +5,8 @@ import { CommentType } from '../../types/CommentType';
 import { commentsApi } from '../../api/comments';
 import { CommentForm } from '../CommentForm/CommentForm';
 
+const BASE_URL = 'https://comments-spa-test.onrender.com';
+
 interface Props {
   comment: CommentType;
   level: number;
@@ -32,13 +34,13 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
 
   const handleImageClick = (imageLink: string | null) => {
     if (imageLink) {
-      window.open(`https://comments-spa-test.onrender.com/${imageLink}`, '_blank');
+      window.open(`${BASE_URL}/${imageLink}`, '_blank');
     }
   };
 
   const handleTextFileClick = (textFileLink: string | null) => {
     if (textFileLink) {
-      window.open(`https://comments-spa-test.onrender.com/${textFileLink}`, '_blank');
+      window.open(`${BASE_URL}/${textFileLink}`, '_blank');
     }
   };
 
@@ -75,7 +77,7 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
                 {image_link && (
                   <img
                     className="Comment__attachedImage"
-                    src={`https://comments-spa-test.onrender.com/${image_link}`}
+                    src={`${BASE_URL}/${image_link}`}
                     alt="Attached"
                     onClick={() => handleImageClick(image_link)}
                   />
