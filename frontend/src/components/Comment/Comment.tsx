@@ -1,9 +1,12 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './Comment.scss';
+import Modal from 'react-responsive-modal';
 import { CommentType } from '../../types/CommentType';
 import { commentsApi } from '../../api/comments';
 import { CommentForm } from '../CommentForm/CommentForm';
+import { Loader } from '../Loader/Loader';
 
 const BASE_URL = 'https://comments-spa-test.onrender.com';
 
@@ -15,6 +18,9 @@ interface Props {
 export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
   const [childrenComments, setChildrenComments] = useState<CommentType[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [isTextModalOpen, setTextModalOpen] = useState(false);
+  const [textModalContent, setTextModalContent] = useState('');
 
   const { id, image_link, text_file_link } = comment;
 
@@ -32,16 +38,29 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
     loadChildrenComments();
   }, [id]);
 
-  const handleImageClick = (imageLink: string | null) => {
-    if (imageLink) {
-      window.open(`${BASE_URL}/${imageLink}`, '_blank');
+  const handleImageClick = () => {
+    setImageModalOpen(true);
+  };
+
+  const handleTextFileClick = async () => {
+    setTextModalOpen(true);
+
+    try {
+      const response = await fetch(`${BASE_URL}/${text_file_link}`);
+      const text = await response.text();
+
+      setTextModalContent(text);
+    } catch (error) {
+      console.error('Error loading text file:', error);
     }
   };
 
-  const handleTextFileClick = (textFileLink: string | null) => {
-    if (textFileLink) {
-      window.open(`${BASE_URL}/${textFileLink}`, '_blank');
-    }
+  const closeImageModal = () => {
+    setImageModalOpen(false);
+  };
+
+  const closeTextModal = () => {
+    setTextModalOpen(false);
   };
 
   return (
@@ -79,19 +98,61 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
                     className="Comment__attachedImage"
                     src={`${BASE_URL}/${image_link}`}
                     alt="Attached"
-                    onClick={() => handleImageClick(image_link)}
+                    onClick={handleImageClick}
                   />
                 )}
 
                 {text_file_link && (
                   <div
                     className="Comment__fileIcon"
-                    onClick={() => handleTextFileClick(text_file_link)}
+                    onClick={handleTextFileClick}
                   >
                   </div>
                 )}
               </div>
             )}
+
+            <>
+              {isImageModalOpen && (
+                <Modal
+                  open={isImageModalOpen}
+                  onClose={closeImageModal}
+                  center
+                  classNames={{
+                    modal: 'Modal',
+                    overlay: 'Modal__overlay',
+                    modalAnimationIn: 'Modal__animation',
+                    overlayAnimationIn: 'Modal__animation',
+                  }}
+                  animationDuration={800}
+                >
+                  <img src={`${BASE_URL}/${image_link}`} alt="Attachment" />
+                </Modal>
+              )}
+
+              {isTextModalOpen && (
+                <Modal
+                  open={isTextModalOpen}
+                  onClose={closeTextModal}
+                  center
+                  classNames={{
+                    modal: 'Modal',
+                    overlay: 'Modal__overlay',
+                    modalAnimationIn: 'Modal__animation',
+                    overlayAnimationIn: 'Modal__animation',
+                  }}
+                  animationDuration={800}
+                >
+                  {textModalContent
+                    ? (
+                      <pre>{textModalContent}</pre>
+                    )
+                    : (
+                      <Loader />
+                    )}
+                </Modal>
+              )}
+            </>
           </div>
         </div>
 
