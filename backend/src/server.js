@@ -28,7 +28,7 @@ const resizeAndSaveImage = async(req, res, next) => {
     const outputFilePath = path.join(__dirname, 'uploads', 'images', newFilename);
 
     await sharp(imageBuffer)
-      .resize(20, 10, { fit: 'inside' })
+      .resize(320, 240, { fit: 'inside' })
       .toFile(outputFilePath);
 
     req.files.imageFile[0].filename = newFilename;
