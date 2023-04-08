@@ -2,10 +2,8 @@
 'use strict';
 
 const express = require('express');
-const sharp = require('sharp');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs/promises');
 const { validationResult } = require('express-validator');
 
 const { User, Comment } = require('./models/associations');
@@ -13,55 +11,11 @@ const commentValidationRules = require('./validations/commentValidationRules');
 const setupDatabase = require('./main');
 const createFolderIfNotExists = require('./utils/createFolderIfNotExists');
 const upload = require('./utils/multerConfig');
+const resizeAndSaveImage = require('./middlewares/resizeAndSaveImage');
+const saveTextFile = require('./middlewares/saveTextFile');
 
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'images'));
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'text'));
-
-const resizeAndSaveImage = async(req, res, next) => {
-  if (!req.files.imageFile) {
-    return next();
-  }
-
-  try {
-    const imageBuffer = req.files.imageFile[0].buffer;
-    const newFilename = `${Date.now()}-${req.files.imageFile[0].originalname}`;
-    const outputFilePath = path.join(__dirname, 'uploads', 'images', newFilename);
-
-    await sharp(imageBuffer)
-      .resize(320, 240, { fit: 'inside', withoutEnlargement: true })
-      .toFile(outputFilePath);
-
-    req.files.imageFile[0].filename = newFilename;
-  } catch (error) {
-    console.error('Error resizing image:', error);
-
-    return res.status(500).send('Internal server error');
-  }
-
-  next();
-};
-
-const saveTextFile = async(req, res, next) => {
-  if (!req.files.textFile) {
-    return next();
-  }
-
-  try {
-    const textBuffer = req.files.textFile[0].buffer;
-    const newFilename = `${Date.now()}-${req.files.textFile[0].originalname}`;
-    const outputFilePath = path.join(__dirname, 'uploads', 'text', newFilename);
-
-    await fs.writeFile(outputFilePath, textBuffer);
-
-    req.files.textFile[0].filename = newFilename;
-  } catch (error) {
-    console.error('Error saving text file:', error);
-
-    return res.status(500).send('Internal server error');
-  }
-
-  next();
-};
 
 const app = express();
 
