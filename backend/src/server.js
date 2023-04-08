@@ -14,8 +14,8 @@ const setupDatabase = require('./main');
 const createFolderIfNotExists = require('./utils/createFolderIfNotExists');
 const upload = require('./utils/multerConfig');
 
-createFolderIfNotExists(path.join(__dirname, '..', 'uploads', 'images'));
-createFolderIfNotExists(path.join(__dirname, '..', 'uploads', 'text'));
+createFolderIfNotExists(path.join(__dirname, 'uploads', 'images'));
+createFolderIfNotExists(path.join(__dirname, 'uploads', 'text'));
 
 const resizeAndSaveImage = async(req, res, next) => {
   if (!req.files.imageFile) {
@@ -25,7 +25,7 @@ const resizeAndSaveImage = async(req, res, next) => {
   try {
     const imageBuffer = req.files.imageFile[0].buffer;
     const newFilename = `${Date.now()}-${req.files.imageFile[0].originalname}`;
-    const outputFilePath = path.join(__dirname, '..', 'uploads', 'images', newFilename);
+    const outputFilePath = path.join(__dirname, 'uploads', 'images', newFilename);
 
     await sharp(imageBuffer)
       .resize(320, 240, { fit: 'inside', withoutEnlargement: true })
@@ -49,7 +49,7 @@ const saveTextFile = async(req, res, next) => {
   try {
     const textBuffer = req.files.textFile[0].buffer;
     const newFilename = `${Date.now()}-${req.files.textFile[0].originalname}`;
-    const outputFilePath = path.join(__dirname, '..', 'uploads', 'text', newFilename);
+    const outputFilePath = path.join(__dirname, 'uploads', 'text', newFilename);
 
     await fs.writeFile(outputFilePath, textBuffer);
 
