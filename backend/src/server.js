@@ -7,7 +7,7 @@ const path = require('path');
 const { validationResult } = require('express-validator');
 
 const { User, Comment } = require('./models/associations');
-const { commentValidationRules } = require('./validations/commentValidationRules');
+const commentValidationRules = require('./validations/commentValidationRules');
 const setupDatabase = require('./main');
 const createFolderIfNotExists = require('./utils/createFolderIfNotExists');
 const upload = require('./utils/multerConfig');
@@ -87,6 +87,8 @@ app.get('/comments/:id/children', async(req, res) => {
     res.status(500).send('Internal server error');
   }
 });
+
+console.log('commentValidationRules:', commentValidationRules);
 
 // Create newComment endpoint
 app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }]), commentValidationRules, async(req, res) => {
