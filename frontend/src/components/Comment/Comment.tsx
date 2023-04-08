@@ -1,12 +1,10 @@
-/* eslint-disable react/button-has-type */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import './Comment.scss';
-import Modal from 'react-responsive-modal';
 import { CommentType } from '../../types/CommentType';
 import { commentsApi } from '../../api/comments';
 import { CommentForm } from '../CommentForm/CommentForm';
-import { Loader } from '../Loader/Loader';
+import { ModalWindow } from '../ModalWindow/ModalWindow';
 
 const BASE_URL = 'https://comments-spa-test.onrender.com';
 
@@ -20,7 +18,7 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
   const [showForm, setShowForm] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isTextModalOpen, setTextModalOpen] = useState(false);
-  const [textModalContent, setTextModalContent] = useState('');
+  const [textModalContent, setTextModalContent] = useState('File is empty');
 
   const { id, image_link, text_file_link } = comment;
 
@@ -34,6 +32,19 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
     }
   };
 
+  const loadTextFileContent = async (fileLink: string) => {
+    try {
+      const response = await fetch(fileLink);
+      const text = await response.text();
+
+      return text;
+    } catch (error) {
+      console.error('Error loading text file:', error);
+
+      return 'Error loading text file';
+    }
+  };
+
   useEffect(() => {
     loadChildrenComments();
   }, [id]);
@@ -44,15 +55,9 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
 
   const handleTextFileClick = async () => {
     setTextModalOpen(true);
+    const text = await loadTextFileContent(`${BASE_URL}/${text_file_link}`);
 
-    try {
-      const response = await fetch(`${BASE_URL}/${text_file_link}`);
-      const text = await response.text();
-
-      setTextModalContent(text);
-    } catch (error) {
-      console.error('Error loading text file:', error);
-    }
+    setTextModalContent(text);
   };
 
   const closeImageModal = () => {
@@ -69,8 +74,8 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
         <div className="Comment__wrapper">
           <img
             className="Comment__avatar"
-            src={`https://avatars.dicebear.com/api/human/${id}.svg`}
-            alt=""
+            src={`https://avatars.dicebear.com/api/human/${comment.author.email}.svg`}
+            alt="User avatar"
           />
 
           <div className="Comment__body">
@@ -114,43 +119,22 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
 
             <>
               {isImageModalOpen && (
-                <Modal
-                  open={isImageModalOpen}
+                <ModalWindow
+                  isOpen={isImageModalOpen}
                   onClose={closeImageModal}
-                  center
-                  classNames={{
-                    modal: 'Modal',
-                    overlay: 'Modal__overlay',
-                    modalAnimationIn: 'Modal__animation',
-                    overlayAnimationIn: 'Modal__animation',
-                  }}
-                  animationDuration={800}
-                >
-                  <img src={`${BASE_URL}/${image_link}`} alt="Attachment" />
-                </Modal>
+                  fileType="image"
+                  fileSrc={`${BASE_URL}/${image_link}`}
+                />
               )}
 
               {isTextModalOpen && (
-                <Modal
-                  open={isTextModalOpen}
+                <ModalWindow
+                  isOpen={isTextModalOpen}
                   onClose={closeTextModal}
-                  center
-                  classNames={{
-                    modal: 'Modal',
-                    overlay: 'Modal__overlay',
-                    modalAnimationIn: 'Modal__animation',
-                    overlayAnimationIn: 'Modal__animation',
-                  }}
-                  animationDuration={800}
-                >
-                  {textModalContent
-                    ? (
-                      <pre>{textModalContent}</pre>
-                    )
-                    : (
-                      <Loader />
-                    )}
-                </Modal>
+                  fileType="text"
+                  fileSrc={`${BASE_URL}/${text_file_link}`}
+                  textContent={textModalContent}
+                />
               )}
             </>
           </div>
