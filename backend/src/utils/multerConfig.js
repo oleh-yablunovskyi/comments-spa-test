@@ -6,7 +6,7 @@ const path = require('path');
 const allowedImageMimeTypes = ['image/jpeg', 'image/gif', 'image/png'];
 const maxTextFileSize = 100 * 1024; // 100 KB
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (_req, file, cb) => {
   let errorMessage = '';
 
   switch (file.fieldname) {

@@ -4,28 +4,16 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 
 const { User, Comment } = require('./models/associations');
+const { commentValidationRules } = require('./validations/commentValidationRules');
 const setupDatabase = require('./main');
 const createFolderIfNotExists = require('./utils/createFolderIfNotExists');
 const upload = require('./utils/multerConfig');
 
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'images'));
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'text'));
-
-const commentValidationRules = [
-  body('userName').notEmpty().withMessage('User name is required'),
-  body('email').isEmail().withMessage('Email must be a valid email address'),
-  body('message').notEmpty().withMessage('Message is required'),
-  body('homePage').if(body('homePage').notEmpty()).isURL().withMessage('Home page must be a valid URL'),
-  body('parentId').custom(value => {
-    if (value === null || /^\d+$/.test(value)) {
-      return true;
-    }
-    throw new Error('Parent ID must be a numerical string or null');
-  }),
-];
 
 const app = express();
 
