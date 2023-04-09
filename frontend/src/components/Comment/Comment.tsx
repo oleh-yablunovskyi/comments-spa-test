@@ -63,7 +63,10 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
 
   useEffect(() => {
     const handleNewComment = (newComment: CommentType) => {
-      setChildrenComments((prevComments) => [...prevComments, newComment]);
+      // Check if the new comment is a direct child of the current comment
+      if (newComment.parent_comment_id === id) {
+        setChildrenComments((prevComments) => [...prevComments, newComment]);
+      }
     };
 
     // Add event listener for 'new_childComment' event from the WebSocket
