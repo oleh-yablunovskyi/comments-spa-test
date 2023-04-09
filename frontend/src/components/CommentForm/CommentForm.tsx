@@ -232,7 +232,7 @@ export const CommentForm: React.FC<Props> = ({
             </div>
 
             <ReCAPTCHA
-              sitekey="your-recaptcha-site-key"
+              sitekey="6LdBBHElAAAAAIs23eYxaCLh2o114Fs4cKf7FoQK"
               onChange={handleRecaptchaChange}
             />
 
