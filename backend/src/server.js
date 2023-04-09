@@ -4,6 +4,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const http = require('http');
+const socketIO = require('socket.io');
 const { validationResult } = require('express-validator');
 
 const { User, Comment } = require('./models/associations');
@@ -11,7 +13,7 @@ const commentValidationRules = require('./validations/commentValidationRules');
 const setupDatabase = require('./main');
 const createFolderIfNotExists = require('./utils/createFolderIfNotExists');
 const upload = require('./utils/multerConfig');
-const verifyRecaptcha = require('./utils/recaptcha');
+// const verifyRecaptcha = require('./utils/recaptcha');
 const resizeAndSaveImage = require('./middlewares/resizeAndSaveImage');
 const saveTextFile = require('./middlewares/saveTextFile');
 
@@ -99,15 +101,15 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
     homePage,
     parentId,
     message,
-    recaptchaResponse,
+    // recaptchaResponse,
   } = req.body;
 
   // Verify reCAPTCHA
-  const isRecaptchaValid = await verifyRecaptcha(recaptchaResponse);
+  // const isRecaptchaValid = await verifyRecaptcha(recaptchaResponse);
 
-  if (!isRecaptchaValid) {
-    return res.status(400).json({ errors: [{ msg: 'Invalid reCAPTCHA' }] });
-  }
+  // if (!isRecaptchaValid) {
+  //   return res.status(400).json({ errors: [{ msg: 'Invalid reCAPTCHA' }] });
+  // }
 
   // Check for validation errors
   const errors = validationResult(req);
@@ -167,6 +169,9 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
       return res.status(500).send('Error creating comment');
     }
 
+    // Emit an event to inform clients about the new comment
+    io.emit('new_comment', createdComment);
+
     res.send(createdComment);
   } catch (err) {
     console.error('Error creating comment:', err);
@@ -174,15 +179,27 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
   }
 });
 
-// Start the server
+// Create and start the server
 const PORT = process.env.PORT || 5000;
+const server = http.createServer(app);
+const io = socketIO(server);
 
 (async() => {
   try {
     await setupDatabase();
 
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
+    });
+
+    io.on('connection', (socket) => {
+      console.log('A user connected');
+
+      socket.on('disconnect', () => {
+        console.log('A user disconnected');
+      });
+
+      // Add other socket events as needed
     });
   } catch (error) {
     console.error('Error while creating tables:', error);

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import socket from './socket';
 import { CommentsList } from './components/CommentsList/CommentsList';
 import { CommentForm } from './components/CommentForm/CommentForm';
 import { Loader } from './components/Loader/Loader';
@@ -35,6 +36,16 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadTopComments();
+
+    // Add event listener for real-time updates
+    socket.on('new_comment', (newComment: CommentType) => {
+      setTopComments((prevComments) => [...prevComments, newComment]);
+    });
+
+    return () => {
+    // Remove event listener on cleanup
+      socket.off('new_comment');
+    };
   }, []);
 
   return (
@@ -53,7 +64,7 @@ export const App: React.FC = () => {
         </div>
 
         <div className="App__bottom">
-          <CommentForm onSubmitLoadComments={loadTopComments} />
+          <CommentForm />
         </div>
       </div>
     </div>
