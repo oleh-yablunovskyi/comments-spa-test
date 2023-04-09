@@ -169,7 +169,7 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
       return res.status(500).send('Error creating comment');
     }
 
-    // Emit an event to inform clients about the new comment
+    // Emit events to inform clients about new comments
     if (parentId) {
       io.emit('new_childComment', createdComment);
     } else {
@@ -202,8 +202,6 @@ const io = socketIO(server);
       socket.on('disconnect', () => {
         console.log('A user disconnected');
       });
-
-      // Add other socket events as needed
     });
   } catch (error) {
     console.error('Error while creating tables:', error);
