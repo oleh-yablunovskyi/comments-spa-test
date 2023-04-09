@@ -66,7 +66,7 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
 
   const handleTextFileClick = async () => {
     setTextModalOpen(true);
-    const text = await loadTextFileContent(`${BASE_URL}/${text_file_link}`);
+    const text = await loadTextFileContent(`${text_file_link}`);
 
     setTextModalContent(text);
   };

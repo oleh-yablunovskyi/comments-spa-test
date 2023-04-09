@@ -34,7 +34,7 @@ const createComment = async (payload: FormData) => {
 };
 
 const getFile = async (fileLink: string): Promise<Blob> => {
-  const response = await axios.get(`${BASE_URL}/files/${fileLink}`, {
+  const response = await axios.get(`${fileLink}`, {
     responseType: 'blob',
   });
 
