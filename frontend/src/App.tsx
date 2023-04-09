@@ -38,13 +38,13 @@ export const App: React.FC = () => {
     loadTopComments();
 
     // Add event listener for real-time updates
-    socket.on('new_comment', (newComment: CommentType) => {
+    socket.on('new_topComment', (newComment: CommentType) => {
       setTopComments((prevComments) => [...prevComments, newComment]);
     });
 
     return () => {
     // Remove event listener on cleanup
-      socket.off('new_comment');
+      socket.off('new_topComment');
     };
   }, []);
 
