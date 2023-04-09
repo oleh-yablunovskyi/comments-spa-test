@@ -109,6 +109,8 @@ export const CommentForm: React.FC<Props> = ({
       }
     });
 
+    payload.append('recaptchaResponse', recaptchaResponse);
+
     try {
       const response = await commentsApi.createComment(payload);
 
