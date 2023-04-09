@@ -2,8 +2,8 @@
 import axios from 'axios';
 import { CommentType } from '../types/CommentType';
 
-const BASE_URL = 'https://comments-spa-test.onrender.com';
-// const BASE_URL = 'http://localhost:5000';
+// const BASE_URL = 'https://comments-spa-test.onrender.com';
+const BASE_URL = 'http://localhost:5000';
 
 const getTopComments = async (): Promise<CommentType[]> => {
   const response = await axios
@@ -20,21 +20,30 @@ const getChildrenCommentsByID = async (id: number): Promise<CommentType[]> => {
 };
 
 const createComment = async (payload: FormData) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/comments`, payload, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+  const response = await axios.post(`${BASE_URL}/comments`, payload, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 
-    console.log('Comment submitted successfully', response.data);
-  } catch (error) {
-    console.error('Error submitting comment:', error);
+  if (response.status !== 200) {
+    throw new Error('Error submitting comment');
   }
+
+  return response.data;
+};
+
+const getFile = async (fileLink: string): Promise<Blob> => {
+  const response = await axios.get(`${BASE_URL}/files/${fileLink}`, {
+    responseType: 'blob',
+  });
+
+  return response.data;
 };
 
 export const commentsApi = {
   getTopComments,
   getChildrenCommentsByID,
   createComment,
+  getFile,
 };
