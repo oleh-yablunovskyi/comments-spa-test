@@ -101,7 +101,7 @@ export const CommentForm: React.FC<Props> = ({
       const response = await commentsApi.createComment(payload);
 
       console.log('Comment submitted successfully:', response);
-    } catch (error: any) {
+    } catch (error) {
       Notify.failure('An error occurred while submitting the comment. Please try again.', { timeout: 5000 });
     }
 
