@@ -71,6 +71,13 @@ export const CommentForm: React.FC<Props> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!formData.message) {
+      Notify.failure('Please enter a message.', { timeout: 5000 });
+
+      return;
+    }
+
     setIsLoading(true);
 
     const sanitizedMessage = sanitizeMessage(formData.message);
@@ -143,6 +150,8 @@ export const CommentForm: React.FC<Props> = ({
                   required
                   className="Form__input"
                   onChange={handleInputChange}
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                  title="Please enter a valid email address (example: johndoe@example.com)"
                 />
               </label>
 
@@ -173,6 +182,7 @@ export const CommentForm: React.FC<Props> = ({
                   modules={modules}
                   formats={formats}
                   theme="snow"
+                  placeholder="Enter your comment here..."
                 />
               </div>
             </div>
