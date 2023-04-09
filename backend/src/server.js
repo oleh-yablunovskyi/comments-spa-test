@@ -106,7 +106,7 @@ app.get('/comments/:id/children', async(req, res) => {
 });
 
 // Create newComment endpoint
-app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }, { name: 'recaptchaResponse' }]), resizeAndSaveImage, saveTextFile, commentValidationRules, async(req, res) => {
+app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }]), resizeAndSaveImage, saveTextFile, commentValidationRules, async(req, res) => {
   const {
     userName,
     email,
@@ -116,7 +116,7 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
     recaptchaResponse,
   } = req.body;
 
-  console.log(recaptchaResponse);
+  console.log('Recaptcha Response:', recaptchaResponse);
 
   // Verify reCAPTCHA
   const isRecaptchaValid = await verifyRecaptcha(recaptchaResponse);
