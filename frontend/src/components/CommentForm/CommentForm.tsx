@@ -231,12 +231,12 @@ export const CommentForm: React.FC<Props> = ({
               </label>
             </div>
 
-            <button type="submit" className="Form__submitButton">Submit</button>
-
             <ReCAPTCHA
               sitekey="6LfMP3ElAAAAAOflJaX40X36kjx_xqOh1zVcDimq"
               onChange={handleRecaptchaChange}
             />
+
+            <button type="submit" className="Form__submitButton">Submit</button>
           </form>
         )}
     </>
