@@ -37,13 +37,15 @@ export const App: React.FC = () => {
   useEffect(() => {
     loadTopComments();
 
-    // Add event listener for real-time updates
-    socket.on('new_topComment', (newComment: CommentType) => {
+    const handleNewComment = (newComment: CommentType) => {
       setTopComments((prevComments) => [...prevComments, newComment]);
-    });
+    };
+
+    // Add event listener for 'new_topComment' event from the WebSocket
+    socket.on('new_topComment', handleNewComment);
 
     return () => {
-    // Remove event listener on cleanup
+    // Clean up the event listener when the component is unmounted
       socket.off('new_topComment');
     };
   }, []);
