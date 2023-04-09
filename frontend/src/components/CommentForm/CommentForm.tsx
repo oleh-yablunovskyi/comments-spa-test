@@ -4,7 +4,8 @@ import './CommentForm.scss';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import ReCAPTCHA from 'react-google-recaptcha';
+// import ReCAPTCHA from 'react-google-recaptcha';
+import socket from '../../socket';
 import { sanitizeMessage } from '../../utils/sanitizeMessage';
 import { modules, formats } from './quillConfig';
 import { Loader } from '../Loader/Loader';
@@ -12,7 +13,6 @@ import { FormDataType } from '../../types/FormDataType';
 import { commentsApi } from '../../api/comments';
 
 interface Props {
-  onSubmitLoadComments: () => Promise<void>;
   onSubmitHideForm?: () => void;
   parentId?: string | null;
 }
@@ -28,13 +28,12 @@ const initialFormData: FormDataType = {
 };
 
 export const CommentForm: React.FC<Props> = ({
-  onSubmitLoadComments,
   onSubmitHideForm,
   parentId = null,
 }) => {
   const [formData, setFormData] = useState<FormDataType>({ ...initialFormData, parentId });
   const [isLoading, setIsLoading] = useState(false);
-  const [recaptchaResponse, setRecaptchaResponse] = useState<string | null>(null);
+  // const [recaptchaResponse, setRecaptchaResponse] = useState<string | null>(null);
   const [count, setCount] = useState(0);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,18 +70,18 @@ export const CommentForm: React.FC<Props> = ({
     setFormData(initialFormData);
   };
 
-  const handleRecaptchaChange = (value: string | null) => {
-    setRecaptchaResponse(value);
-  };
+  // const handleRecaptchaChange = (value: string | null) => {
+  //   setRecaptchaResponse(value);
+  // };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!recaptchaResponse) {
-      Notify.failure('Please complete the CAPTCHA.', { timeout: 5000 });
+    // if (!recaptchaResponse) {
+    //   Notify.failure('Please complete the CAPTCHA.', { timeout: 5000 });
 
-      return;
-    }
+    //   return;
+    // }
 
     if (!formData.message) {
       Notify.failure('Please enter a message.', { timeout: 5000 });
@@ -109,17 +108,18 @@ export const CommentForm: React.FC<Props> = ({
       }
     });
 
-    payload.append('recaptchaResponse', recaptchaResponse);
+    // payload.append('recaptchaResponse', recaptchaResponse);
 
     try {
       const response = await commentsApi.createComment(payload);
 
       console.log('Comment submitted successfully:', response);
+
+      // Emit event to refresh comments with the new comment data
+      socket.emit('new_comment', response);
     } catch (error) {
       Notify.failure('An error occurred while submitting the comment. Please try again.', { timeout: 5000 });
     }
-
-    await onSubmitLoadComments();
 
     setCount((prevCount => prevCount + 1));
     resetFormData();
@@ -233,12 +233,12 @@ export const CommentForm: React.FC<Props> = ({
               </label>
             </div>
 
-            <div className="Form__captcha">
+            {/* <div className="Form__captcha">
               <ReCAPTCHA
                 sitekey="6LfMP3ElAAAAAOflJaX40X36kjx_xqOh1zVcDimq"
                 onChange={handleRecaptchaChange}
               />
-            </div>
+            </div> */}
 
             <button type="submit" className="Form__submitButton">Submit</button>
           </form>
