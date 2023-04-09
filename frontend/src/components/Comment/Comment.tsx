@@ -70,11 +70,11 @@ export const Comment: React.FC<Props> = React.memo(({ comment, level }) => {
     };
 
     // Add event listener for 'new_comment' event from the WebSocket
-    socket.on('new_comment', handleNewComment);
+    socket.on('new_childComment', handleNewComment);
 
     // Clean up the event listener when the component is unmounted
     return () => {
-      socket.off('new_comment', handleNewComment);
+      socket.off('new_childComment', handleNewComment);
     };
   }, [id]);
 

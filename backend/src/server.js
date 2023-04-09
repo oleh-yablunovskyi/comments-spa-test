@@ -170,7 +170,11 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
     }
 
     // Emit an event to inform clients about the new comment
-    io.emit('new_comment', createdComment);
+    if (parentId) {
+      io.emit('new_topComment', createdComment);
+    } else {
+      io.emit('new_childComment', createdComment);
+    }
 
     res.send(createdComment);
   } catch (err) {
