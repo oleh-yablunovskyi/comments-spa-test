@@ -4,6 +4,7 @@ import './CommentForm.scss';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { sanitizeMessage } from '../../utils/sanitizeMessage';
 import { modules, formats } from './quillConfig';
 import { Loader } from '../Loader/Loader';
@@ -33,6 +34,7 @@ export const CommentForm: React.FC<Props> = ({
 }) => {
   const [formData, setFormData] = useState<FormDataType>({ ...initialFormData, parentId });
   const [isLoading, setIsLoading] = useState(false);
+  const [recaptchaResponse, setRecaptchaResponse] = useState<string | null>(null);
   const [count, setCount] = useState(0);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,8 +71,18 @@ export const CommentForm: React.FC<Props> = ({
     setFormData(initialFormData);
   };
 
+  const handleRecaptchaChange = (value: string | null) => {
+    setRecaptchaResponse(value);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!recaptchaResponse) {
+      Notify.failure('Please complete the CAPTCHA.', { timeout: 5000 });
+
+      return;
+    }
 
     if (!formData.message) {
       Notify.failure('Please enter a message.', { timeout: 5000 });
@@ -218,6 +230,11 @@ export const CommentForm: React.FC<Props> = ({
                 />
               </label>
             </div>
+
+            <ReCAPTCHA
+              sitekey="your-recaptcha-site-key"
+              onChange={handleRecaptchaChange}
+            />
 
             <button type="submit" className="Form__submitButton">Submit</button>
           </form>

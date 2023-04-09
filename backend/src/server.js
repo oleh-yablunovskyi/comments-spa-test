@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { validationResult } = require('express-validator');
+const axios = require('axios');
 
 const { User, Comment } = require('./models/associations');
 const commentValidationRules = require('./validations/commentValidationRules');
@@ -16,6 +17,20 @@ const saveTextFile = require('./middlewares/saveTextFile');
 
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'images'));
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'text'));
+
+async function verifyRecaptcha(response) {
+  const secretKey = process.env.RECAPTCHA_SECRETKEY;
+
+  try {
+    const result = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${response}`);
+
+    return result.data.success;
+  } catch (error) {
+    console.error('Error verifying reCAPTCHA:', error);
+
+    return false;
+  }
+}
 
 const app = express();
 
@@ -98,7 +113,15 @@ app.post('/comments', upload.fields([{ name: 'imageFile' }, { name: 'textFile' }
     homePage,
     parentId,
     message,
+    recaptchaResponse,
   } = req.body;
+
+  // Verify reCAPTCHA
+  const isRecaptchaValid = await verifyRecaptcha(recaptchaResponse);
+
+  if (!isRecaptchaValid) {
+    return res.status(400).json({ errors: [{ msg: 'Invalid reCAPTCHA' }] });
+  }
 
   const errors = validationResult(req);
 
