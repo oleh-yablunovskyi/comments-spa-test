@@ -94,7 +94,7 @@ export const App: React.FC = () => {
     // Clean up the event listener when the component is unmounted
       socket.off('new_topComment');
     };
-  }, []);
+  }, [sortBy, sortOrder, currentPage]);
 
   // Second useEffect hook to fetch data when sortBy or sortOrder change
   useEffect(() => {
