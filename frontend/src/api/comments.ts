@@ -2,12 +2,24 @@
 import axios from 'axios';
 import { CommentType } from '../types/CommentType';
 
-const BASE_URL = 'https://comments-spa-test.onrender.com';
-// const BASE_URL = 'http://localhost:5000';
+// const BASE_URL = 'https://comments-spa-test.onrender.com';
+const BASE_URL = 'http://localhost:5000';
 
-const getTopComments = async (): Promise<CommentType[]> => {
+// const getTopComments = async (): Promise<CommentType[]> => {
+//   const response = await axios
+//     .get(`${BASE_URL}/comments`);
+
+//   return response.data;
+// };
+
+const getTopComments = async (
+  sortBy: string,
+  sortOrder: string,
+  page: number,
+  // perPage: number,
+): Promise<CommentType[]> => {
   const response = await axios
-    .get(`${BASE_URL}/comments`);
+    .get(`${BASE_URL}/comments?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}`);
 
   return response.data;
 };

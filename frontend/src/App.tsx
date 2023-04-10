@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import './App.scss';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import socket from './socket';
@@ -8,16 +9,23 @@ import { CommentForm } from './components/CommentForm/CommentForm';
 import { Loader } from './components/Loader/Loader';
 import { commentsApi } from './api/comments';
 import { CommentType } from './types/CommentType';
+import { SelectorsPanel } from './components/SelectorsPanel/SelectorsPanel';
 
 export const App: React.FC = () => {
   const [topComments, setTopComments] = useState<CommentType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [searchParams] = useSearchParams();
+
+  const sortBy = searchParams.get('sortBy') || 'created_at';
+  const sortOrder = searchParams.get('sortOrder') || 'desc';
+  const currentPage = Number(searchParams.get('page')) || 1;
+
   const loadTopComments = async () => {
     setIsLoading(true);
 
     try {
-      const comments = await commentsApi.getTopComments();
+      const comments = await commentsApi.getTopComments(sortBy, sortOrder, currentPage);
 
       console.log('Loaded topComments:', comments);
 
@@ -34,9 +42,8 @@ export const App: React.FC = () => {
     }
   };
 
+  // First useEffect hook to handle WebSocket event
   useEffect(() => {
-    loadTopComments();
-
     const handleNewComment = (newComment: CommentType) => {
       setTopComments((prevComments) => [...prevComments, newComment]);
     };
@@ -50,12 +57,20 @@ export const App: React.FC = () => {
     };
   }, []);
 
+  // Second useEffect hook to fetch data when sortBy or sortOrder change
+  useEffect(() => {
+    loadTopComments();
+  }, [sortBy, sortOrder, currentPage]);
+
   return (
     <div className="container">
       <div className="App">
         <h1 className="App__title">Comments</h1>
 
         <div className="App__main">
+
+          <SelectorsPanel />
+
           {isLoading
             ? (
               <Loader />
