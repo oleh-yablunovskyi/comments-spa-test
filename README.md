@@ -11,8 +11,10 @@ A single-page application (SPA) for displaying, creating, and managing comments 
 
 ## Features
 
-- Display top-level comments and their child comments
-- Create new comments with support for images and text files
+- Display top-level comments and their child comments with support for plain text and certain HTML tags
+- Create new comments with support for uploading images and text files
+- Robust validation for comment input on both frontend and backend
+- Images are automatically resized to a specified size on the server
 - Google reCAPTCHA integration for form validation
 - Sort comments by different criteria (e.g., date, popularity)
 - Pagination for efficient navigation through comments
