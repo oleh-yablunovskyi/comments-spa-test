@@ -44,8 +44,46 @@ export const App: React.FC = () => {
 
   // First useEffect hook to handle WebSocket event
   useEffect(() => {
+    // const handleNewComment = (newComment: CommentType) => {
+    //   setTopComments((prevComments) => [...prevComments, newComment]);
+    // };
+
     const handleNewComment = (newComment: CommentType) => {
-      setTopComments((prevComments) => [...prevComments, newComment]);
+      setTopComments((prevComments) => {
+        const updatedComments = [...prevComments, newComment];
+
+        // Custom sorting function based on sortBy and sortOrder
+        const customSort = (a: CommentType, b: CommentType) => {
+          let compareValueA: any;
+          let compareValueB: any;
+
+          switch (sortBy) {
+            case 'user_name':
+              compareValueA = a.author.user_name;
+              compareValueB = b.author.user_name;
+              break;
+            case 'email':
+              compareValueA = a.author.email;
+              compareValueB = b.author.email;
+              break;
+            default:
+              compareValueA = a[sortBy as keyof CommentType];
+              compareValueB = b[sortBy as keyof CommentType];
+          }
+
+          if (compareValueA < compareValueB) {
+            return sortOrder === 'asc' ? -1 : 1;
+          }
+
+          if (compareValueA > compareValueB) {
+            return sortOrder === 'asc' ? 1 : -1;
+          }
+
+          return 0;
+        };
+
+        return updatedComments.sort(customSort);
+      });
     };
 
     // Add event listener for 'new_topComment' event from the WebSocket
