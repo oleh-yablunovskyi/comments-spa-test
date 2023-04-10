@@ -42,50 +42,50 @@ export const App: React.FC = () => {
     }
   };
 
-  // First useEffect hook to handle WebSocket event
-  useEffect(() => {
-    const handleNewComment = (newComment: CommentType) => {
-      setTopComments((prevComments) => {
-        const updatedComments = [...prevComments];
+  const handleNewComment = (newComment: CommentType) => {
+    setTopComments((prevComments) => {
+      const updatedComments = [...prevComments];
 
-        const insertionIndex = updatedComments.findIndex((comment) => {
-          let compareValueNewComment: any;
-          let compareValueComment: any;
+      const insertionIndex = updatedComments.findIndex((comment) => {
+        let compareValueNewComment: any;
+        let compareValueComment: any;
 
-          switch (sortBy) {
-            case 'user_name':
-              compareValueNewComment = newComment.author.user_name.toLowerCase();
-              compareValueComment = comment.author.user_name.toLowerCase();
-              break;
+        switch (sortBy) {
+          case 'user_name':
+            compareValueNewComment = newComment.author.user_name.toLowerCase();
+            compareValueComment = comment.author.user_name.toLowerCase();
+            break;
 
-            case 'email':
-              compareValueNewComment = newComment.author.email;
-              compareValueComment = comment.author.email;
-              break;
+          case 'email':
+            compareValueNewComment = newComment.author.email;
+            compareValueComment = comment.author.email;
+            break;
 
-            default:
-              compareValueNewComment = newComment[sortBy as keyof CommentType];
-              compareValueComment = comment[sortBy as keyof CommentType];
-          }
-
-          if (sortOrder === 'asc') {
-            return compareValueNewComment < compareValueComment;
-          }
-
-          return compareValueNewComment > compareValueComment;
-        });
-
-        if (insertionIndex === -1) {
-          updatedComments.push(newComment);
-        } else if (insertionIndex < topComments.length) {
-          // Only insert the new comment if it belongs on the current page
-          updatedComments.splice(insertionIndex, 0, newComment);
+          default:
+            compareValueNewComment = newComment[sortBy as keyof CommentType];
+            compareValueComment = comment[sortBy as keyof CommentType];
         }
 
-        return updatedComments;
-      });
-    };
+        if (sortOrder === 'asc') {
+          return compareValueNewComment < compareValueComment;
+        }
 
+        return compareValueNewComment > compareValueComment;
+      });
+
+      if (insertionIndex === -1) {
+        updatedComments.push(newComment);
+      } else if (insertionIndex < topComments.length) {
+        // Only insert the new comment if it belongs on the current page
+        updatedComments.splice(insertionIndex, 0, newComment);
+      }
+
+      return updatedComments;
+    });
+  };
+
+  // First useEffect hook to handle WebSocket event
+  useEffect(() => {
     // Add event listener for 'new_topComment' event from the WebSocket
     socket.on('new_topComment', handleNewComment);
 
