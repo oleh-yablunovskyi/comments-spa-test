@@ -44,10 +44,6 @@ export const App: React.FC = () => {
 
   // First useEffect hook to handle WebSocket event
   useEffect(() => {
-    // const handleNewComment = (newComment: CommentType) => {
-    //   setTopComments((prevComments) => [...prevComments, newComment]);
-    // };
-
     const handleNewComment = (newComment: CommentType) => {
       setTopComments((prevComments) => {
         const updatedComments = [...prevComments];
@@ -61,10 +57,12 @@ export const App: React.FC = () => {
               compareValueNewComment = newComment.author.user_name.toLowerCase();
               compareValueComment = comment.author.user_name.toLowerCase();
               break;
+
             case 'email':
               compareValueNewComment = newComment.author.email;
               compareValueComment = comment.author.email;
               break;
+
             default:
               compareValueNewComment = newComment[sortBy as keyof CommentType];
               compareValueComment = comment[sortBy as keyof CommentType];
