@@ -32,6 +32,10 @@ A single-page application (SPA) for displaying, creating, and managing comments 
 1. Start the backend server by running `npm start` in the `backend` directory.
 2. Start the frontend server by running `npm start` in the `frontend` directory.
 3. Open your browser and navigate to `http://localhost:3000` (or the appropriate port if different).
+4. Create a `.env` file in the `frontend` directory with the following content:
+``` console
+REACT_APP_BASE_URL=http://localhost:5000
+```
 
 ## Technology Stack
 
