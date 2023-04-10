@@ -79,7 +79,8 @@ export const App: React.FC = () => {
 
         if (insertionIndex === -1) {
           updatedComments.push(newComment);
-        } else {
+        } else if (insertionIndex < topComments.length) {
+          // Only insert the new comment if it belongs on the current page
           updatedComments.splice(insertionIndex, 0, newComment);
         }
 
@@ -94,7 +95,7 @@ export const App: React.FC = () => {
     // Clean up the event listener when the component is unmounted
       socket.off('new_topComment');
     };
-  }, [sortBy, sortOrder, currentPage]);
+  }, [sortBy, sortOrder, topComments.length]);
 
   // Second useEffect hook to fetch data when sortBy or sortOrder change
   useEffect(() => {
