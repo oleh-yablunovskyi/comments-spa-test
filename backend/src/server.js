@@ -11,13 +11,12 @@ const setupDatabase = require('./main');
 const createFolderIfNotExists = require('./utils/createFolderIfNotExists');
 const commentsRoutesFactory = require('./routes/commentsRoutes');
 
+// Create necessary folders for uploads
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'images'));
 createFolderIfNotExists(path.join(__dirname, 'uploads', 'text'));
 
+// Set up Express app, HTTP server, Socket.IO, and comments routes with injected io object
 const app = express();
-
-// Initialize server, io object and commentsRoutes
-const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketIO(server);
 const commentsRoutes = commentsRoutesFactory(io);
@@ -25,11 +24,13 @@ const commentsRoutes = commentsRoutesFactory(io);
 app.use(cors());
 app.use(express.json());
 
-app.use('/uploads', express.static('uploads'));
-
 app.use('/comments', commentsRoutes);
 
+app.use('/uploads', express.static('uploads'));
+
 // Initialize DB, start server, and handle WebSocket connections
+const PORT = process.env.PORT || 5000;
+
 (async() => {
   try {
     await setupDatabase();
