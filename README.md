@@ -42,8 +42,11 @@ REACT_APP_BASE_URL=http://localhost:5000
 - React for the frontend
 - Express.js for the backend
 - PostgreSQL for the database
+- WebSockets for real-time updates
 - Multer for handling file uploads
 - Sharp for resizing uploaded images on server
-- Google reCAPTCHA for form validation
-- WebSockets for real-time updates
+- Express-validator for data validation on server
+- ReactQuill for text editor
+- Sanitize-html for sanitization of form message
 - React Router for routing and sorting options
+- Google reCAPTCHA
