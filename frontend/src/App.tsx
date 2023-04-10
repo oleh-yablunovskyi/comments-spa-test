@@ -50,39 +50,40 @@ export const App: React.FC = () => {
 
     const handleNewComment = (newComment: CommentType) => {
       setTopComments((prevComments) => {
-        const updatedComments = [...prevComments, newComment];
+        const updatedComments = [...prevComments];
 
-        // Custom sorting function based on sortBy and sortOrder
-        const customSort = (a: CommentType, b: CommentType) => {
-          let compareValueA: any;
-          let compareValueB: any;
+        const insertionIndex = updatedComments.findIndex((comment) => {
+          let compareValueNewComment: any;
+          let compareValueComment: any;
 
           switch (sortBy) {
             case 'user_name':
-              compareValueA = a.author.user_name;
-              compareValueB = b.author.user_name;
+              compareValueNewComment = newComment.author.user_name;
+              compareValueComment = comment.author.user_name;
               break;
             case 'email':
-              compareValueA = a.author.email;
-              compareValueB = b.author.email;
+              compareValueNewComment = newComment.author.email;
+              compareValueComment = comment.author.email;
               break;
             default:
-              compareValueA = a[sortBy as keyof CommentType];
-              compareValueB = b[sortBy as keyof CommentType];
+              compareValueNewComment = newComment[sortBy as keyof CommentType];
+              compareValueComment = comment[sortBy as keyof CommentType];
           }
 
-          if (compareValueA < compareValueB) {
-            return sortOrder === 'asc' ? -1 : 1;
+          if (sortOrder === 'asc') {
+            return compareValueNewComment < compareValueComment;
           }
 
-          if (compareValueA > compareValueB) {
-            return sortOrder === 'asc' ? 1 : -1;
-          }
+          return compareValueNewComment > compareValueComment;
+        });
 
-          return 0;
-        };
+        if (insertionIndex === -1) {
+          updatedComments.push(newComment);
+        } else {
+          updatedComments.splice(insertionIndex, 0, newComment);
+        }
 
-        return updatedComments.sort(customSort);
+        return updatedComments;
       });
     };
 
