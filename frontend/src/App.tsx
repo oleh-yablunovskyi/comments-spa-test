@@ -58,8 +58,8 @@ export const App: React.FC = () => {
 
           switch (sortBy) {
             case 'user_name':
-              compareValueNewComment = newComment.author.user_name;
-              compareValueComment = comment.author.user_name;
+              compareValueNewComment = newComment.author.user_name.toLowerCase();
+              compareValueComment = comment.author.user_name.toLowerCase();
               break;
             case 'email':
               compareValueNewComment = newComment.author.email;
