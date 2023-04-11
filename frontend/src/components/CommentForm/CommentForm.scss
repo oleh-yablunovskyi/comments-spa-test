@@ -39,6 +39,11 @@
     border-radius: 3px;
     font-size: 16px;
 
+    &--invalid {
+      border-color: red;
+      outline-color: red;
+    }
+
     &::placeholder {
       font-size: 14px;
     }
