@@ -45,7 +45,6 @@ Demo-link: https://oleh-yablunovskyi.github.io/comments-spa-test/
 ``` console
 DATABASE_URL=postgres://username:password@host:port/database_name
 ```
-Replace username, password, host, port, and database_name with the corresponding values you obtained from your PostgreSQL service or tool.  
 5. Add RECAPTCHA_SECRETKEY environment variable to .env file in folowing format:
 ``` console
 RECAPTCHA_SECRETKEY=your_recaptcha_secret_key
