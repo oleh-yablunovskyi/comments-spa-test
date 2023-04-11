@@ -45,7 +45,7 @@ Demo-link: https://oleh-yablunovskyi.github.io/comments-spa-test/
 ``` console
 DATABASE_URL=postgres://username:password@host:port/database_name
 ```
-Replace username, password, host, port, and database_name with the corresponding values you obtained from your PostgreSQL service or tool.
+Replace username, password, host, port, and database_name with the corresponding values you obtained from your PostgreSQL service or tool.  
 5. Add RECAPTCHA_SECRETKEY environment variable to .env file in folowing format:
 ``` console
 RECAPTCHA_SECRETKEY=your_recaptcha_secret_key
@@ -56,12 +56,12 @@ Replace your_recaptcha_secret_key with the actual reCAPTCHA secret key that you 
 
 1. Start the backend server:
    - Open a terminal or command prompt.
-   - Navigate to the `backend` directory by running `cd backend`.
+   - Navigate to the backend directory by running `cd backend`.
    - Install backend dependencies by running `npm install`.
    - Start the backend server by running `npm start`.
 2. Start the frontend server:
    - Open a new terminal or command prompt.
-   - Navigate to the `frontend` directory by running `cd frontend`.
+   - Navigate to the frontend directory by running `cd frontend`.
    - Install frontend dependencies by running `npm install`.
    - Start the frontend server by running `npm start`.
 3. Open your web browser and navigate to `http://localhost:3000` (or use the appropriate port if it is different).
