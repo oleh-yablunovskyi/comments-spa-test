@@ -41,15 +41,14 @@ Demo-link: https://oleh-yablunovskyi.github.io/comments-spa-test/
 1. Clone this repository and open it in your editor.
 2. Ensure you are using Node.js v14.18.2.
 3. Create `.env` file inside the `backend` directory.
-4. Add DATABASE_URL environment variable to .env file in folowing format:
+4. Add DATABASE_URL environment variable to .env file with the corresponding values you obtained from your PostgreSQL service or tool in folowing format:
 ``` console
 DATABASE_URL=postgres://username:password@host:port/database_name
 ```
-5. Add RECAPTCHA_SECRETKEY environment variable to .env file in folowing format:
+5. Add RECAPTCHA_SECRETKEY environment variable to .env file with the actual reCAPTCHA secret key in folowing format:
 ``` console
 RECAPTCHA_SECRETKEY=your_recaptcha_secret_key
 ```
-Replace your_recaptcha_secret_key with the actual reCAPTCHA secret key that you received from the Google reCAPTCHA website (https://www.google.com/recaptcha/).
 
 ## Running the App
 
